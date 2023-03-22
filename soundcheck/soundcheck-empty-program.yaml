@@ -1,0 +1,14 @@
+---
+- id: empty-program
+  name: Empty Program
+  ownerEntityRef: group:default/example-owner
+  description: >
+    Empty
+  documentationURL: 
+  levels:
+    - ordinal: 1
+      checks:
+        - id: empty_check
+          name: Empty Check
+          description: >
+            Empty description

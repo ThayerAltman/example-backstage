@@ -35,6 +35,7 @@ import { RequirePermission } from '@backstage/plugin-permission-react';
 import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
 import { githubAuthApiRef } from '@backstage/core-plugin-api';
 import { SignInProviderConfig, SignInPage } from '@backstage/core-components';
+import { SoundcheckOverviewPage } from '@spotify/backstage-plugin-soundcheck';
 
 const githubProvider: SignInProviderConfig = {
   id: 'github-auth-provider',
@@ -109,6 +110,7 @@ const routes = (
     </Route>
     <Route path="/settings" element={<UserSettingsPage />} />
     <Route path="/catalog-graph" element={<CatalogGraphPage />} />
+    <Route path="/soundcheck" element={<SoundcheckOverviewPage />} />
   </FlatRoutes>
 );
 

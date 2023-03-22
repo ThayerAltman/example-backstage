@@ -56,6 +56,11 @@ import {
 import { TechDocsAddons } from '@backstage/plugin-techdocs-react';
 import { ReportIssue } from '@backstage/plugin-techdocs-module-addons-contrib';
 
+import {
+  EntitySoundcheckContent,
+  EntitySoundcheckCard,
+} from '@spotify/backstage-plugin-soundcheck';
+
 const techdocsContent = (
   <EntityTechdocsContent>
     <TechDocsAddons>
@@ -120,7 +125,9 @@ const overviewContent = (
     <Grid item md={6} xs={12}>
       <EntityCatalogGraphCard variant="gridItem" height={400} />
     </Grid>
-
+    <Grid item md={6} xs={12}>
+      <EntitySoundcheckCard />
+    </Grid>
     <Grid item md={4} xs={12}>
       <EntityLinksCard />
     </Grid>
@@ -134,6 +141,9 @@ const serviceEntityPage = (
   <EntityLayout>
     <EntityLayout.Route path="/" title="Overview">
       {overviewContent}
+    </EntityLayout.Route>
+    <EntityLayout.Route path="/soundcheck" title="Soundcheck">
+      <EntitySoundcheckContent />
     </EntityLayout.Route>
 
     <EntityLayout.Route path="/ci-cd" title="CI/CD">
@@ -172,6 +182,9 @@ const websiteEntityPage = (
   <EntityLayout>
     <EntityLayout.Route path="/" title="Overview">
       {overviewContent}
+    </EntityLayout.Route>
+    <EntityLayout.Route path="/soundcheck" title="Soundcheck">
+      <EntitySoundcheckContent />
     </EntityLayout.Route>
 
     <EntityLayout.Route path="/ci-cd" title="CI/CD">
