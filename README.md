@@ -92,3 +92,6 @@ Addtionally [soundcheck-empty-program.yaml](https://github.com/ThayerAltman/exam
           description: >
             Empty description
 ```
+
+# Soundcheck Configuration
+In order to see Soundcheck in action, an entity will need to be added to the catalog.  Using the register existing component menu, register a simple [entity](https://github.com/ThayerAltman/node-app/blob/master/catalog-info.yaml)
