@@ -1,6 +1,6 @@
 # [Backstage](https://backstage.io)
 
-This is your newly scaffolded Backstage App, Good Luck!
+This is meant to be a guide for getting Soundcheck up and running.  Each section of the read me walks through a commit done to install and use Soundcheck.  The application can be run from any commit in this repo.
 
 To start the app, run:
 
@@ -55,7 +55,9 @@ This commit consists of following the Soundcheck installation instructions:
 1. [Backend Installation](https://www.npmjs.com/package/@spotify/backstage-plugin-soundcheck-backend#1-install-the-plugins)
 2. [Frontend Installation](https://www.npmjs.com/package/@spotify/backstage-plugin-soundcheck)
 
-At this point Soundcheck is installed.  But it is not doing anything.  The menu bar on the left should be visible:
+At this point Soundcheck is installed, but it is not doing anything.
+
+The menu bar on the left should be visible:
 
 ![](./pictures/side-bar.png)
 
