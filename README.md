@@ -62,3 +62,31 @@ At this point Soundcheck is installed.  But it is not doing anything.  The menu 
 As well as the tab menu when viewing an entity:
 
 ![](./pictures/tab-menu.png)
+
+There were changes made to [app-config.yaml](https://github.com/ThayerAltman/example-backstage/commit/bbfa3ffd0990197b3aa7355016a40c2045340fee#diff-ec52f22d476ccc33271d11c4f08a68369614378aa0cb9aa5aba2f08943cd68df) adding:
+
+```yaml
+soundcheck:
+  programs:
+    $include: ./soundcheck/soundcheck-empty-program.yaml
+```
+
+Here an empty program was added to Soundcheck.  A valid program is needed for the plugin to start.
+
+Addtionally [soundcheck-empty-program.yaml](https://github.com/ThayerAltman/example-backstage/commit/bbfa3ffd0990197b3aa7355016a40c2045340fee#diff-ec52f22d476ccc33271d11c4f08a68369614378aa0cb9aa5aba2f08943cd68df) is the empty Soundcheck program referenced in the app-config.yaml:
+```yaml
+---
+- id: empty-program
+  name: Empty Program
+  ownerEntityRef: group:default/example-owner
+  description: >
+    Empty
+  documentationURL: 
+  levels:
+    - ordinal: 1
+      checks:
+        - id: empty_check
+          name: Empty Check
+          description: >
+            Empty description
+```
