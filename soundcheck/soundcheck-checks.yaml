@@ -1,0 +1,31 @@
+---
+- id: has_less_than_ten_open_issues
+  rule:
+    factRef: github:default/repo_details
+    path: $.open_issues
+    operator: lessThan
+    value: 10
+  passedMessage: |
+    Less than 10 open issues
+  failedMessage: |
+    Ten or more open issue(s)
+- id: is_repo_private
+  rule:
+    factRef: github:default/repo_details
+    path: $.private
+    operator: equal
+    value: true
+  passedMessage: |
+    Repo is private
+  failedMessage: |
+    Repo is not private, change repo to private
+- id: default_branch_is_main
+  rule:
+    factRef: github:default/repo_details
+    path: $.default_branch
+    operator: equal
+    value: main
+  passedMessage: |
+    Default banch is main
+  failedMessage: |
+    Change default branch to main

@@ -115,4 +115,9 @@ catalog:
     #     - allow: [User, Group]
 soundcheck:
   programs:
-    $include: ./soundcheck/soundcheck-empty-program.yaml
+    $include: ./soundcheck/soundcheck-programs.yaml
+  checks:
+    $include: ./soundcheck/soundcheck-checks.yaml
+  collectors:
+    github:
+      $include: ./soundcheck/github-facts-collectors.yaml
