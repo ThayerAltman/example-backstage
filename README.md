@@ -1,4 +1,4 @@
-# [Backstage](https://backstage.io)
+# [Backstage and Soundcheck Tutorial](https://backstage.io)
 
 This is meant to be a guide for getting Soundcheck up and running.  Each section of the read me walks through a commit done to install and use Soundcheck.  The application can be run from any commit in this repo.
 
@@ -8,13 +8,18 @@ To start the app, run:
 yarn install
 yarn dev
 ```
-# Initial Backstage Setup
-## Commit: [Create Repo](https://github.com/ThayerAltman/example-backstage/commit/64f470394c5ec8022af05d47247db0723e69bbd4)
+
+## Initial Backstage Setup
+
+### Commit: [Create Repo](https://github.com/ThayerAltman/example-backstage/commit/64f470394c5ec8022af05d47247db0723e69bbd4)
+
 This repo was created by following the [Backstage installation](https://backstage.spotify.com/learn/standing-up-backstage/standing-up-backstage/2-install-app/) instructions
 
-## Commit: [Configuration](https://github.com/ThayerAltman/example-backstage/commit/64f470394c5ec8022af05d47247db0723e69bbd4)
+### Commit: [Configuration](https://github.com/ThayerAltman/example-backstage/commit/64f470394c5ec8022af05d47247db0723e69bbd4)
+
 This commit consists of following instructions from [Setting up PostgreSQL](https://backstage.spotify.com/learn/standing-up-backstage/configuring-backstage/5-config-2/) to [Setting up Authentication](https://backstage.spotify.com/learn/standing-up-backstage/configuring-backstage/7-authentication/)
 To run the application, an app-config.local.yaml will need to be added.  It will something look like:
+
 ```yaml
 backend:
   database:
@@ -38,20 +43,26 @@ integrations:
     - host: github.com
       token: <github_token>
 ```
+
 1. <client_id> and <secret_key> are created [here](https://backstage.spotify.com/learn/standing-up-backstage/configuring-backstage/7-authentication/)
 
 2. <github_token> is created [here](https://backstage.spotify.com/learn/standing-up-backstage/putting-backstage-into-action/8-integration/)
 
-# SoundCheck Install
+## SoundCheck Install
+
 Add the Spotify license key to you app-config-local.yaml
+
 ```yaml
 spotify:
   licenseKey: <license_key>
 ```
+
 The <license_key> can be found by going to [Backstage Account Overview](https://backstage.spotify.com/account/)
 
-## Commit: [Soundcheck Installtion and Setup](https://github.com/ThayerAltman/example-backstage/commit/b145d6aacd51fb00189dfd542d8b0eb41e8fbc97)
+### Commit: [Soundcheck Installtion and Setup](https://github.com/ThayerAltman/example-backstage/commit/b145d6aacd51fb00189dfd542d8b0eb41e8fbc97)
+
 This commit consists of following the Soundcheck installation instructions:
+
 1. [Backend Installation](https://www.npmjs.com/package/@spotify/backstage-plugin-soundcheck-backend#1-install-the-plugins)
 2. [Frontend Installation](https://www.npmjs.com/package/@spotify/backstage-plugin-soundcheck)
 
@@ -59,11 +70,11 @@ At this point Soundcheck is installed, but it is not doing anything.
 
 The menu bar on the left should be visible:
 
-![](./pictures/side-bar.png)
+![Side bar Image](./pictures/side-bar.png)
 
 As well as the tab menu when viewing an entity:
 
-![](./pictures/tab-menu.png)
+![Tabe Menu Image](./pictures/tab-menu.png)
 
 There were changes made to [app-config.yaml](https://github.com/ThayerAltman/example-backstage/commit/bbfa3ffd0990197b3aa7355016a40c2045340fee#diff-ec52f22d476ccc33271d11c4f08a68369614378aa0cb9aa5aba2f08943cd68df) adding:
 
@@ -76,6 +87,7 @@ soundcheck:
 Here an empty program was added to Soundcheck.  A valid program is needed for the plugin to start.
 
 Addtionally [soundcheck-empty-program.yaml](https://github.com/ThayerAltman/example-backstage/commit/bbfa3ffd0990197b3aa7355016a40c2045340fee#diff-ec52f22d476ccc33271d11c4f08a68369614378aa0cb9aa5aba2f08943cd68df) is the empty Soundcheck program referenced in the app-config.yaml:
+
 ```yaml
 ---
 - id: empty-program
@@ -93,5 +105,237 @@ Addtionally [soundcheck-empty-program.yaml](https://github.com/ThayerAltman/exam
             Empty description
 ```
 
-# Soundcheck Configuration
+## Soundcheck Configuration
+
 In order to see Soundcheck in action, an entity will need to be added to the catalog.  Using the register existing component menu, register a simple [entity](https://github.com/ThayerAltman/node-app/blob/master/catalog-info.yaml)
+
+### Commit: [Add GitHub Collector and Basic Program](https://github.com/ThayerAltman/example-backstage/commit/066bad9b34df78b293c90747d7544bac0b888123)
+
+This commit adds a simple program that involves using the GitHub fact collector to verify the following:
+
+1. The repo has less than ten open issues.
+2. The repo's default branch is named main
+3. The repo is private.
+
+This is accomplished by defining the program in **soundcheck-programs.yaml**.  This file represents the entire tech health initiative.  In this case there is only one level (Basic Setup), in later steps there will be more levels added.
+
+```yaml
+---
+- id: basic-setup
+  name: Basic Setup
+  ownerEntityRef: group:default/example-owner
+  description: >
+    Improve quality and reliability of your software component
+    by measuring the use of testing best practices.
+  documentationURL: https://www.backstage.io
+  levels:
+    - ordinal: 1
+      checks:
+        - id: has_less_than_ten_open_issues
+          name: Less than 10 open issues
+          description: >
+            The service should have less than 10 open issues
+        - id: is_repo_private
+          name: The GitHub repo is private
+          description: >
+            All repos need to private.
+        - id: default_branch_is_main
+          name: The default branch is main
+          description: >
+            Default branches should be named main
+```
+Each of the above program checks coorespond to a check in the soundcheck-checks.yaml:
+```yaml
+---
+- id: has_less_than_ten_open_issues
+  rule:
+    factRef: github:default/repo_details
+    path: $.open_issues
+    operator: lessThan
+    value: 10
+  passedMessage: |
+    Less than 10 open issues
+  failedMessage: |
+    Ten or more open issue(s)
+- id: is_repo_private
+  rule:
+    factRef: github:default/repo_details
+    path: $.private
+    operator: equal
+    value: true
+  passedMessage: |
+    Repo is private
+  failedMessage: |
+    Repo is not private, change repo to private
+- id: default_branch_is_main
+  rule:
+    factRef: github:default/repo_details
+    path: $.default_branch
+    operator: equal
+    value: main
+  passedMessage: |
+    Default banch is main
+  failedMessage: |
+    Change default branch to main
+```
+
+Note: The names of the checks in **soundcheck-checks.yaml** and **soundcheck-programs.yaml** must match.  The above file defines what each check is actually checking for.  As an example:
+
+```yaml
+- id: has_less_than_ten_open_issues
+  rule:
+    factRef: github:default/repo_details
+    path: $.open_issues
+    operator: lessThan
+    value: 10
+  passedMessage: |
+    Less than 10 open issues
+  failedMessage: |
+    Ten or more open issue(s)
+```
+
+**default_branch_is_main** will verify that the given repository has less than ten open issues.  Under the hood, Soundcheck is calling the GitHub API https://api.github.com/repos/{org}/{repo} using the provided GitHub token.  An example response is as follows:
+
+<pre tabindex="0" id="json" style="max-height: 165px;" type="application/json">
+{
+    "id": 616657405,
+    "node_id": "R_kgDOJMFx_Q",
+    "name": "node-app",
+    "full_name": "ThayerAltman/node-app",
+    "private": true,
+    "owner": {
+        "login": "ThayerAltman",
+        "id": 110566684,
+        "node_id": "U_kgDOBpcdHA",
+        "avatar_url": "https://avatars.githubusercontent.com/u/110566684?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/ThayerAltman",
+        "html_url": "https://github.com/ThayerAltman",
+        "followers_url": "https://api.github.com/users/ThayerAltman/followers",
+        "following_url": "https://api.github.com/users/ThayerAltman/following{/other_user}",
+        "gists_url": "https://api.github.com/users/ThayerAltman/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/ThayerAltman/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/ThayerAltman/subscriptions",
+        "organizations_url": "https://api.github.com/users/ThayerAltman/orgs",
+        "repos_url": "https://api.github.com/users/ThayerAltman/repos",
+        "events_url": "https://api.github.com/users/ThayerAltman/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/ThayerAltman/received_events",
+        "type": "User",
+        "site_admin": false
+    },
+    "html_url": "https://github.com/ThayerAltman/node-app",
+    "description": "This is node-app",
+    "fork": false,
+    "url": "https://api.github.com/repos/ThayerAltman/node-app",
+    "forks_url": "https://api.github.com/repos/ThayerAltman/node-app/forks",
+    "keys_url": "https://api.github.com/repos/ThayerAltman/node-app/keys{/key_id}",
+    "collaborators_url": "https://api.github.com/repos/ThayerAltman/node-app/collaborators{/collaborator}",
+    "teams_url": "https://api.github.com/repos/ThayerAltman/node-app/teams",
+    "hooks_url": "https://api.github.com/repos/ThayerAltman/node-app/hooks",
+    "issue_events_url": "https://api.github.com/repos/ThayerAltman/node-app/issues/events{/number}",
+    "events_url": "https://api.github.com/repos/ThayerAltman/node-app/events",
+    "assignees_url": "https://api.github.com/repos/ThayerAltman/node-app/assignees{/user}",
+    "branches_url": "https://api.github.com/repos/ThayerAltman/node-app/branches{/branch}",
+    "tags_url": "https://api.github.com/repos/ThayerAltman/node-app/tags",
+    "blobs_url": "https://api.github.com/repos/ThayerAltman/node-app/git/blobs{/sha}",
+    "git_tags_url": "https://api.github.com/repos/ThayerAltman/node-app/git/tags{/sha}",
+    "git_refs_url": "https://api.github.com/repos/ThayerAltman/node-app/git/refs{/sha}",
+    "trees_url": "https://api.github.com/repos/ThayerAltman/node-app/git/trees{/sha}",
+    "statuses_url": "https://api.github.com/repos/ThayerAltman/node-app/statuses/{sha}",
+    "languages_url": "https://api.github.com/repos/ThayerAltman/node-app/languages",
+    "stargazers_url": "https://api.github.com/repos/ThayerAltman/node-app/stargazers",
+    "contributors_url": "https://api.github.com/repos/ThayerAltman/node-app/contributors",
+    "subscribers_url": "https://api.github.com/repos/ThayerAltman/node-app/subscribers",
+    "subscription_url": "https://api.github.com/repos/ThayerAltman/node-app/subscription",
+    "commits_url": "https://api.github.com/repos/ThayerAltman/node-app/commits{/sha}",
+    "git_commits_url": "https://api.github.com/repos/ThayerAltman/node-app/git/commits{/sha}",
+    "comments_url": "https://api.github.com/repos/ThayerAltman/node-app/comments{/number}",
+    "issue_comment_url": "https://api.github.com/repos/ThayerAltman/node-app/issues/comments{/number}",
+    "contents_url": "https://api.github.com/repos/ThayerAltman/node-app/contents/{+path}",
+    "compare_url": "https://api.github.com/repos/ThayerAltman/node-app/compare/{base}...{head}",
+    "merges_url": "https://api.github.com/repos/ThayerAltman/node-app/merges",
+    "archive_url": "https://api.github.com/repos/ThayerAltman/node-app/{archive_format}{/ref}",
+    "downloads_url": "https://api.github.com/repos/ThayerAltman/node-app/downloads",
+    "issues_url": "https://api.github.com/repos/ThayerAltman/node-app/issues{/number}",
+    "pulls_url": "https://api.github.com/repos/ThayerAltman/node-app/pulls{/number}",
+    "milestones_url": "https://api.github.com/repos/ThayerAltman/node-app/milestones{/number}",
+    "notifications_url": "https://api.github.com/repos/ThayerAltman/node-app/notifications{?since,all,participating}",
+    "labels_url": "https://api.github.com/repos/ThayerAltman/node-app/labels{/name}",
+    "releases_url": "https://api.github.com/repos/ThayerAltman/node-app/releases{/id}",
+    "deployments_url": "https://api.github.com/repos/ThayerAltman/node-app/deployments",
+    "created_at": "2023-03-20T20:24:06Z",
+    "updated_at": "2023-03-20T20:24:14Z",
+    "pushed_at": "2023-04-12T20:25:16Z",
+    "git_url": "git://github.com/ThayerAltman/node-app.git",
+    "ssh_url": "git@github.com:ThayerAltman/node-app.git",
+    "clone_url": "https://github.com/ThayerAltman/node-app.git",
+    "svn_url": "https://github.com/ThayerAltman/node-app",
+    "homepage": null,
+    "size": 5,
+    "stargazers_count": 0,
+    "watchers_count": 0,
+    "language": "JavaScript",
+    "has_issues": true,
+    "has_projects": true,
+    "has_downloads": true,
+    "has_wiki": false,
+    "has_pages": false,
+    "has_discussions": false,
+    "forks_count": 0,
+    "mirror_url": null,
+    "archived": false,
+    "disabled": false,
+    "open_issues_count": 2,
+    "license": null,
+    "allow_forking": true,
+    "is_template": false,
+    "web_commit_signoff_required": false,
+    "topics": [],
+    "visibility": "private",
+    "forks": 0,
+    "open_issues": 2,
+    "watchers": 0,
+    "default_branch": "master",
+    "permissions": {
+        "admin": true,
+        "maintain": true,
+        "push": true,
+        "triage": true,
+        "pull": true
+    },
+    "temp_clone_token": "A2LR2HDARSRGLWJVJDSFZPTEJGH2S",
+    "allow_squash_merge": true,
+    "allow_merge_commit": true,
+    "allow_rebase_merge": true,
+    "allow_auto_merge": false,
+    "delete_branch_on_merge": false,
+    "allow_update_branch": false,
+    "use_squash_pr_title_as_default": false,
+    "squash_merge_commit_message": "COMMIT_MESSAGES",
+    "squash_merge_commit_title": "COMMIT_OR_PR_TITLE",
+    "merge_commit_message": "PR_TITLE",
+    "merge_commit_title": "MERGE_MESSAGE",
+    "network_count": 0,
+    "subscribers_count": 1
+}
+</pre>
+
+The GitHub Fact Collector will look at the value of **"open_issues"** and determine if the value is less than 10.
+
+The final piece of the Soundcheck program is the **github-facts-collectors.yaml**.  This file determine what facts will be collected about the elligible entities.
+
+```yaml
+---
+frequency:
+  cron: '* * * * *'
+filter:
+  kind: 'Component'
+cache:
+  duration:
+    hours: 2
+collects:
+  - factName: repo_details
+    type: RepositoryDetails
+    cache: true
+```
+In this case the **RepositoryDetails** fact will be collected, and the name of the fact will be **repo_details**.  The cron value is **cron: '* * * * *'**, which indicates fact will be collected every minute.  Every minute is far to frequent, but works well in demos :).  Finally the cache duration is set to 2 hours.  This means something.
