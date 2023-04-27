@@ -11,11 +11,11 @@ yarn dev
 
 ## Initial Backstage Setup
 
-### Commit: [Create Repo](https://github.com/ThayerAltman/example-backstage/commit/64f470394c5ec8022af05d47247db0723e69bbd4)
+### 1. Commit: [Create Repo](https://github.com/ThayerAltman/example-backstage/commit/64f470394c5ec8022af05d47247db0723e69bbd4)
 
 This repo was created by following the [Backstage installation](https://backstage.spotify.com/learn/standing-up-backstage/standing-up-backstage/2-install-app/) instructions
 
-### Commit: [Configuration](https://github.com/ThayerAltman/example-backstage/commit/64f470394c5ec8022af05d47247db0723e69bbd4)
+### 2. Commit: [Configuration](https://github.com/ThayerAltman/example-backstage/commit/64f470394c5ec8022af05d47247db0723e69bbd4)
 
 This commit consists of following instructions from [Setting up PostgreSQL](https://backstage.spotify.com/learn/standing-up-backstage/configuring-backstage/5-config-2/) to [Setting up Authentication](https://backstage.spotify.com/learn/standing-up-backstage/configuring-backstage/7-authentication/)
 To run the application, an app-config.local.yaml will need to be added.  It will something look like:
@@ -44,9 +44,9 @@ integrations:
       token: <github_token>
 ```
 
-1. <client_id> and <secret_key> are created [here](https://backstage.spotify.com/learn/standing-up-backstage/configuring-backstage/7-authentication/)
+1. `<client_id>` and `<secret_key>` are created [here](https://backstage.spotify.com/learn/standing-up-backstage/configuring-backstage/7-authentication/)
 
-2. <github_token> is created [here](https://backstage.spotify.com/learn/standing-up-backstage/putting-backstage-into-action/8-integration/)
+2. `<github_token>` is created [here](https://backstage.spotify.com/learn/standing-up-backstage/putting-backstage-into-action/8-integration/)
 
 ## SoundCheck Install
 
@@ -59,7 +59,7 @@ spotify:
 
 The <license_key> can be found by going to [Backstage Account Overview](https://backstage.spotify.com/account/)
 
-### Commit: [Soundcheck Installtion and Setup](https://github.com/ThayerAltman/example-backstage/commit/b145d6aacd51fb00189dfd542d8b0eb41e8fbc97)
+### 3. Commit: [Soundcheck Installtion and Setup](https://github.com/ThayerAltman/example-backstage/commit/b145d6aacd51fb00189dfd542d8b0eb41e8fbc97)
 
 This commit consists of following the Soundcheck installation instructions:
 
@@ -109,7 +109,7 @@ Addtionally [soundcheck-empty-program.yaml](https://github.com/ThayerAltman/exam
 
 In order to see Soundcheck in action, an entity will need to be added to the catalog.  Using the register existing component menu, register a simple [entity](https://github.com/ThayerAltman/node-app/blob/master/catalog-info.yaml)
 
-### Commit: [Add GitHub Collector and Basic Program](https://github.com/ThayerAltman/example-backstage/commit/066bad9b34df78b293c90747d7544bac0b888123)
+### 4. Commit: [Add GitHub Collector and Basic Program](https://github.com/ThayerAltman/example-backstage/commit/066bad9b34df78b293c90747d7544bac0b888123)
 
 This commit adds a simple program that involves using the GitHub fact collector to verify the following:
 
@@ -117,7 +117,7 @@ This commit adds a simple program that involves using the GitHub fact collector 
 2. The repo's default branch is named main
 3. The repo is private.
 
-This is accomplished by defining the program in **soundcheck-programs.yaml**.  This file represents the entire tech health initiative.  In this case there is only one level (Basic Setup), in later steps there will be more levels added.
+This is accomplished by defining the program in `soundcheck-programs.yaml`.  This file represents the entire tech health initiative.  In this case there is only one level (Basic Setup), in later steps there will be more levels added.
 
 ```yaml
 ---
@@ -144,7 +144,7 @@ This is accomplished by defining the program in **soundcheck-programs.yaml**.  T
           description: >
             Default branches should be named main
 ```
-Each of the above program checks coorespond to a check in the soundcheck-checks.yaml:
+Each of the above program checks coorespond to a check in the `soundcheck-checks.yaml`:
 ```yaml
 ---
 - id: has_less_than_ten_open_issues
@@ -179,7 +179,7 @@ Each of the above program checks coorespond to a check in the soundcheck-checks.
     Change default branch to main
 ```
 
-Note: The names of the checks in **soundcheck-checks.yaml** and **soundcheck-programs.yaml** must match.  The above file defines what each check is actually checking for.  As an example:
+Note: The names of the checks in `soundcheck-checks.yaml` and `soundcheck-programs.yaml` must match.  The above file defines what each check is actually checking for.  As an example:
 
 ```yaml
 - id: has_less_than_ten_open_issues
@@ -194,7 +194,7 @@ Note: The names of the checks in **soundcheck-checks.yaml** and **soundcheck-pro
     Ten or more open issues
 ```
 
-**default_branch_is_main** will verify that the given repository has less than ten open issues.  Under the hood, Soundcheck is calling the GitHub API https://api.github.com/repos/{org}/{repo} using the provided GitHub token.  An example *truncated* response is as follows:
+`default_branch_is_main` will verify that the given repository has less than ten open issues.  Under the hood, Soundcheck is calling the GitHub API https://api.github.com/repos/{org}/{repo} using the provided GitHub token.  An example *truncated* response is as follows:
 
 <pre tabindex="0" id="json" style="max-height: 165px;" type="application/json">
 {
@@ -242,9 +242,9 @@ Note: The names of the checks in **soundcheck-checks.yaml** and **soundcheck-pro
 }
 </pre>
 
-The GitHub Fact Collector will look at the value of **"open_issues"** and determine if the value is less than 10.
+The GitHub Fact Collector will look at the value of `"open_issues"` and determine if the value is less than 10.
 
-The final piece of the Soundcheck program is the **github-facts-collectors.yaml**.  This file determine what facts will be collected about the elligible entities.
+The final piece of the Soundcheck program is the `github-facts-collectors.yaml`.  This file determine what facts will be collected about the elligible entities.
 
 ```yaml
 ---
@@ -260,4 +260,4 @@ collects:
     type: RepositoryDetails
     cache: true
 ```
-In this case the **RepositoryDetails** fact will be collected, and the name of the fact will be **repo_details**.  The cron value is <b>cron: '* * * * *'</b> , which indicates fact will be collected every minute.  Every minute is far to frequent, but works well in demos :).  Finally the cache duration is set to 2 hours.  This means something.
+In this case the `RepositoryDetails` fact will be collected, and the name of the fact will be repo_details`.  The cron value is `cron: '* * * * *'`, which indicates fact will be collected every minute.  Every minute is far to frequent, but works well in demos :).  Finally the cache duration is set to 2 hours.  This means something.
