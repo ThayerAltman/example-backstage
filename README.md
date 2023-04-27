@@ -58,7 +58,7 @@ spotify:
   licenseKey: <license_key>
 ```
 
-The <license_key> can be found by going to [Backstage Account Overview](https://backstage.spotify.com/account/)
+The `<license_key>` can be found by going to [Backstage Account Overview](https://backstage.spotify.com/account/)
 
 ### 3. Commit: [Soundcheck Installtion and Setup](https://github.com/ThayerAltman/example-backstage/commit/b145d6aacd51fb00189dfd542d8b0eb41e8fbc97)
 
