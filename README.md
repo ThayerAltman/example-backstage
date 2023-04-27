@@ -77,7 +77,7 @@ As well as the tab menu when viewing an entity:
 
 ![Tabe Menu Image](./pictures/tab-menu.png)
 
-There were changes made to [app-config.yaml](https://github.com/ThayerAltman/example-backstage/commit/bbfa3ffd0990197b3aa7355016a40c2045340fee#diff-ec52f22d476ccc33271d11c4f08a68369614378aa0cb9aa5aba2f08943cd68df) adding:
+Changes made to the [app-config.yaml](https://github.com/ThayerAltman/example-backstage/commit/bbfa3ffd0990197b3aa7355016a40c2045340fee#diff-ec52f22d476ccc33271d11c4f08a68369614378aa0cb9aa5aba2f08943cd68df) include adding:
 
 ```yaml
 soundcheck:
