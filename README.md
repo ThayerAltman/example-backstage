@@ -197,7 +197,7 @@ Note: The names of the checks in `soundcheck-checks.yaml` and `soundcheck-progra
 
 `default_branch_is_main` will verify that the given repository has less than ten open issues.  Under the hood, Soundcheck is calling the GitHub API https://api.github.com/repos/{org}/{repo} using the provided GitHub token.  An example *truncated* response is as follows:
 
-<pre tabindex="0" id="json" style="max-height: 165px;" type="application/json">
+```json
 {
     "id": 616657405,
     "node_id": "R_kgDOJMFx_Q",
@@ -219,13 +219,6 @@ Note: The names of the checks in `soundcheck-checks.yaml` and `soundcheck-progra
     "open_issues": 2,
     "watchers": 0,
     "default_branch": "master",
-    "permissions": {
-        "admin": true,
-        "maintain": true,
-        "push": true,
-        "triage": true,
-        "pull": true
-    },
     "temp_clone_token": "A2LR2HDARSRGLWJVJDSFZPTEJGH2S",
     "allow_squash_merge": true,
     "allow_merge_commit": true,
@@ -241,7 +234,7 @@ Note: The names of the checks in `soundcheck-checks.yaml` and `soundcheck-progra
     "network_count": 0,
     "subscribers_count": 1
 }
-</pre>
+```
 
 The GitHub Fact Collector will look at the value of `"open_issues"` and determine if the value is less than 10.
 
