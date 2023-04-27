@@ -108,7 +108,7 @@ Addtionally [soundcheck-empty-program.yaml](https://github.com/ThayerAltman/exam
 
 ## Soundcheck Configuration
 
-In order to see Soundcheck in action, an entity will need to be added to the catalog.  Using the register existing component menu, register a simple [entity](https://github.com/ThayerAltman/node-app/blob/master/catalog-info.yaml)
+In order to see Soundcheck in action, an entity will need to be added to the catalog.  Using the register existing component button, register a simple [entity](https://github.com/ThayerAltman/node-app/blob/master/catalog-info.yaml)
 
 ### 4. Commit: [Add GitHub Collector and Basic Program](https://github.com/ThayerAltman/example-backstage/commit/066bad9b34df78b293c90747d7544bac0b888123)
 
