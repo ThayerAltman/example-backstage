@@ -114,9 +114,9 @@ In order to see Soundcheck in action, an entity will need to be added to the cat
 
 This commit adds a simple program that involves using the GitHub fact collector to verify the following:
 
-1. The repo has less than ten open issues.
+1. The repo has less than ten open issues
 2. The repo's default branch is named main
-3. The repo is private.
+3. The repo is private
 
 This is accomplished by defining the program in `soundcheck-programs.yaml`.  This file represents the entire tech health initiative.  In this case there is only one level (Basic Setup), in later steps there will be more levels added.
 
