@@ -191,7 +191,7 @@ Note: The names of the checks in **soundcheck-checks.yaml** and **soundcheck-pro
   passedMessage: |
     Less than 10 open issues
   failedMessage: |
-    Ten or more open issue(s)
+    Ten or more open issues
 ```
 
 **default_branch_is_main** will verify that the given repository has less than ten open issues.  Under the hood, Soundcheck is calling the GitHub API https://api.github.com/repos/{org}/{repo} using the provided GitHub token.  An example *truncated* response is as follows:
