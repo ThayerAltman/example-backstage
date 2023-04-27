@@ -260,4 +260,4 @@ collects:
     type: RepositoryDetails
     cache: true
 ```
-In this case the `RepositoryDetails` fact will be collected, and the name of the fact will be `repo_details`.  The cron value is `'* * * * *'`, which indicates fact will be collected every minute.  Every minute is **far** to frequent, but works well in demos :).  Finally the cache duration is set to 2 hours.  This means something.
+In this case the `RepositoryDetails` fact will be collected, and the name of the fact will be `repo_details`.  The cron value is `'* * * * *'`, which indicates fact will be collected every minute.  Every minute is **far** to frequent, but works well in demos :smile: .  Finally the cache duration is set to 2 hours.  This means something.
