@@ -21,3 +21,30 @@
           name: The default branch is main
           description: >
             Default branches should be named main
+    - ordinal: 2
+      checks:
+        - id: has_readme_check
+          name: Readme exists
+          description: >
+            Indicates whether there is a readme in the repo.
+        - id: has_catalog_info_file_check
+          name: Catalog-info exists
+          description: >
+            Indicates the repo containsa a catalog-info.yaml.
+- id: test-certified
+  name: Test Certified
+  ownerEntityRef: group:default/example-owner
+  description: >
+    Improve quality and reliability of your software component
+    by measuring the use of testing best practices.
+  documentationURL: https://www.backstage.io
+  levels:
+    - ordinal: 1
+      checks:
+        - id: python_service_runs_tests
+          name: The python service runs pytest
+          description: >
+            This service is currently running pytest as part of its GitHub actions workflow as defined in the build.yaml
+          filter:
+            catalog:
+              metadata.tags: python

@@ -29,3 +29,21 @@
     Default banch is main
   failedMessage: |
     Change default branch to main
+- id: has_readme_check # The name of the check
+  rule: # How to evaluate this check
+    factRef: scm:default/readme_and_catalog_info_files_exist_fact # The fact data to reference
+    path: $.readme_exists # The path to the field to analyze
+    operator: equal # Indicates the operation to apply
+    value: true # The desired value of the field indicated in path, above.
+- id: has_catalog_info_file_check
+  rule:
+    factRef: scm:default/readme_and_catalog_info_files_exist_fact
+    path: $.catalog_info_exists
+    operator: equal
+    value: true
+- id: python_service_runs_tests
+  rule:
+    factRef: scm:default/python_service_runs_tests
+    path: $.matches
+    operator: equal
+    value: true

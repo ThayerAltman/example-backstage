@@ -121,3 +121,5 @@ soundcheck:
   collectors:
     github:
       $include: ./soundcheck/github-facts-collectors.yaml
+    scm:
+      $include: ./soundcheck/scm-facts-collectors.yaml
