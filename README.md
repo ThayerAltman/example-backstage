@@ -261,3 +261,161 @@ Now if backstage is started and the Soundcheck tab is opened, it should look lik
 
 ![First Checks Image](./pictures/first-checks.png)
 
+### Commit #5 [Adding SCM Fact Collector](https://github.com/ThayerAltman/example-backstage/commit/7ed1b9da2de46f42bc102a72b7856a9af32f4261)
+
+This commit adds another level to the basic program and adds a whole new program.  The checks added will verify that:
+
+1. The repo has a README.md
+2. The repo has a catalog-info.yaml
+3. If the repo is a python service, the github actions are running pytest (using regex)
+
+Three checks have been added to `soundcheck-checks.yaml`:
+
+```yaml
+- id: has_readme_check # The name of the check
+  rule: # How to evaluate this check
+    factRef: scm:default/readme_and_catalog_info_files_exist_fact # The fact data to reference
+    path: $.readme_exists # The path to the field to analyze
+    operator: equal # Indicates the operation to apply
+    value: true # The desired value of the field indicated in path, above.
+- id: has_catalog_info_file_check
+  rule:
+    factRef: scm:default/readme_and_catalog_info_files_exist_fact
+    path: $.catalog_info_exists
+    operator: equal
+    value: true
+- id: python_service_runs_tests
+  rule:
+    factRef: scm:default/python_service_runs_tests
+    path: $.matches
+    operator: equal
+    value: true
+```
+
+Two of the checks `has_readme_check` and `has_catalog_info_file_check` reference the same fact `readme_and_catalog_info_files_exist_fact`
+The facts are collected as per the configuration in `scm-facts-collectors.yaml`:
+
+```yaml
+frequency:
+  cron: '* * * * *' # Defines a schedule for when the facts defined in this file should be collected
+  # This is optional and if omitted, facts will only be collected on demand.
+filter: # A filter specifying which entities to collect the specified facts for
+  kind: 'Component'
+cache: # Defines if the collected facts should be cached, and if so for how long
+  duration:
+    hours: 2
+collects: # An array of fact extractor configuration describing how to collect SCM facts.
+  - factName:
+      readme_and_catalog_info_files_exist_fact # This gives this fact an identifier which is
+      # used to refer to the fact in other
+      # configuration files.
+    type: exists # This identifies the type of fact to collect.
+    data: # This defines the data element which will be returned in the
+      # fact object when the fact is collected.
+      - name: readme_exists # Label for the data element.
+        path: /README.md # The file for which existence will be determined.
+      - name: catalog_info_exists # Label for the data element.
+        path: /catalog-info.yaml
+  - factName:
+      python_service_runs_tests # This gives this fact an identifier which is
+      # used to refer to the fact in other
+      # configuration files.
+    type: regex # This identifies the type of fact to collect.
+    regex:
+      \s*run:\s*\|*\s*pytest.*$
+    path: /.github/workflows/build.yaml
+```
+
+The first fact `readme_and_catalog_info_files_exist_fact` will collect two pieces of information:
+
+1. readme_exists
+2. catalog_info_exists
+
+Looking at the database, this fact will look like:
+
+![Soundcheck Entry Image](./pictures/soundcheck-entry.png)
+
+Specifically the fact collected:
+
+```json
+{
+  "readme_exists": true,
+  "catalog_info_exists": true
+}
+```
+
+Looking back at `soundcheck-checks.yaml`'s check:
+
+```yaml
+- id: has_catalog_info_file_check
+  rule:
+    factRef: scm:default/readme_and_catalog_info_files_exist_fact
+    path: $.catalog_info_exists
+    operator: equal
+    value: true
+```
+
+The above path contains `$.catalog_info_exists`, which will map into the json object collected.
+
+Additionally there is the `python_service_runs_tests` check:
+
+```yaml
+  - factName:
+      python_service_runs_tests # This gives this fact an identifier which is
+      # used to refer to the fact in other
+      # configuration files.
+    type: regex # This identifies the type of fact to collect.
+    regex:
+      \s*run:\s*\|*\s*pytest.*$
+    path: /.github/workflows/build.yaml
+```
+
+This will look at the `/.github/workflows/build.yaml` file and determine if the regular expression `\s*run:\s*\|*\s*pytest.*$` has a match.  The goal of this regular expression is to determine if pytest is being run as part of a GitHub actions workflow.
+
+Looking at the additions to the `soundcheck-programs.yaml`:
+
+```yaml
+    - ordinal: 2
+      checks:
+        - id: has_readme_check
+          name: Readme exists
+          description: >
+            Indicates whether there is a readme in the repo.
+        - id: has_catalog_info_file_check
+          name: Catalog-info exists
+          description: >
+            Indicates the repo containsa a catalog-info.yaml.
+- id: test-certified
+  name: Test Certified
+  ownerEntityRef: group:default/example-owner
+  description: >
+    Improve quality and reliability of your software component
+    by measuring the use of testing best practices.
+  documentationURL: https://www.backstage.io
+  levels:
+    - ordinal: 1
+      checks:
+        - id: python_service_runs_tests
+          name: The python service runs pytest
+          description: >
+            This service is currently running pytest as part of its GitHub actions workflow as defined in the build.yaml
+          filter:
+            catalog:
+              metadata.tags: python
+```
+
+There is a filter added to the `python_service_runs_tests`:
+
+```yaml
+filter:
+  catalog:
+    metadata.tags: python
+```
+
+This will make this check only visible on entities labeled with `python`
+
+In order to see this check in action, a python entity will need to be added to the catalog.  Using the register existing component button, register this [entity](https://github.com/ThayerAltman/simple-python-service/blob/master/catalog-info.yaml)
+
+After adding the entry, the Soundcheck tab for the entry whould look like:
+
+![Test Certified Image](./pictures/test-certified.png)
