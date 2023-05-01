@@ -430,7 +430,7 @@ After adding the entry, the Soundcheck tab for the entry would look like:
 
 ### Commit #6 [Add Custom Fact Collector](https://github.com/ThayerAltman/example-backstage/commit/8493e493dc9df3a6b78d62321b2a838fca82cd0d)
 
-This commit add a custom fact collector.  In this case it will collect the number of branches that have been created for this repo.  It will do that by calling the [GitHub GraphQL API](https://docs.github.com/en/graphql) via [Oktokit](https://github.com/octokit/graphql.js/#typescript).  Any web service call can be done here, this example will highlight how to use Backstage's internal credentials.  The checks being added are:
+This commit adds a custom fact collector.  In this case it will collect the number of branches that have been created for this repo.  It will do that by calling the [GitHub GraphQL API](https://docs.github.com/en/graphql) via [Oktokit](https://github.com/octokit/graphql.js/#typescript).  Any web service call can be done here, this example will highlight how to use Backstage's internal credentials.  The checks being added are:
 
 1. The repo has less than 3 branches
 2. The repo has less than 4 branches
@@ -441,9 +441,9 @@ The files added are similar to what was added in previous commits:
 2. New checks in `soundcheck-checks.yaml`
 3. New collector in `branch-facts-collector.yaml`
 
-**However** in this case there is also code added to facitlitate the checks.
+**However** in this case there is also code added to facilitate the checks.
 
-First lets look at the checks `soundcheck-checks.yaml`:
+First let's look at the checks `soundcheck-checks.yaml`:
 
 ```yaml
 - id: less_than_4_branches
@@ -468,7 +468,7 @@ First lets look at the checks `soundcheck-checks.yaml`:
     3 or more branches
 ```
 
-The `factRef` with value `branch:default/branch_count` coresponds to the collector `branch-facts-collector.yaml`:
+The `factRef` with value `branch:default/branch_count` corresponds to the collector `branch-facts-collector.yaml`:
 
 ```yaml
 ---
@@ -482,7 +482,9 @@ collects:
   type: branchDescriptor 
 ```
 
-This value also corresponds to some identifiers in the code.  Looking at the code, in `branchcount.ts`:
+This value also corresponds to some identifiers in the code.
+
+Looking at a portion of `branchcount.ts`:
 
 ```ts
   async collect(
