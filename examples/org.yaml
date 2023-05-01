@@ -23,5 +23,14 @@ metadata:
   name: web
 spec:
   type: team
+  children: [web-backend]
+---
+# https://backstage.io/docs/features/software-catalog/descriptor-format#kind-group
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: web-backend
+spec:
+  type: team
   children: []
 
