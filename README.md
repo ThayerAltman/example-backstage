@@ -1,6 +1,6 @@
 # [Backstage and Soundcheck Tutorial](https://backstage.io)
 
-This is meant to be a guide for getting Soundcheck up and running.  Each section of the read me walks through a commit done to install and use Soundcheck.  The application can be run from any commit in this repo.
+This is meant to be a guide for getting Soundcheck up and running.  Each section of the README walks through a commit done to install and use Soundcheck.  The application can be run from any commit in this repo.
 
 To start the app, run:
 
@@ -26,7 +26,7 @@ backend:
   database:
     connection:
       host: localhost
-      # Default postgresql port is 5432.  50576 is arbitrary, 5432 is in use by a another application.
+      # Default postgresql port is 5432.  50576 is arbitrary, 5432 is in use by another application.
       port: 50576
       user: postgres
       # Replace the password below with your postgresql password:
@@ -60,7 +60,7 @@ spotify:
 
 The `<license_key>` can be found by going to [Backstage Account Overview](https://backstage.spotify.com/account/)
 
-### Commit #3: [Soundcheck Installtion and Setup](https://github.com/ThayerAltman/example-backstage/commit/b145d6aacd51fb00189dfd542d8b0eb41e8fbc97)
+### Commit #3: [Soundcheck Installation and Setup](https://github.com/ThayerAltman/example-backstage/commit/b145d6aacd51fb00189dfd542d8b0eb41e8fbc97)
 
 This commit consists of following the Soundcheck installation instructions:
 
@@ -71,7 +71,7 @@ At this point Soundcheck is installed, but it is not doing anything.
 
 The menu bar on the left should be visible:
 
-![Side bar Image](./pictures/side-bar.png)
+![Sidebar Image](./pictures/side-bar.png)
 
 As well as the tab menu when viewing an entity:
 
@@ -87,7 +87,7 @@ soundcheck:
 
 Here an empty program was added to Soundcheck.  A valid program is needed for the plugin to start.
 
-Addtionally [soundcheck-empty-program.yaml](https://github.com/ThayerAltman/example-backstage/commit/bbfa3ffd0990197b3aa7355016a40c2045340fee#diff-ec52f22d476ccc33271d11c4f08a68369614378aa0cb9aa5aba2f08943cd68df) is the empty Soundcheck program referenced in the app-config.yaml:
+Additionally [soundcheck-empty-program.yaml](https://github.com/ThayerAltman/example-backstage/commit/bbfa3ffd0990197b3aa7355016a40c2045340fee#diff-ec52f22d476ccc33271d11c4f08a68369614378aa0cb9aa5aba2f08943cd68df) is the empty Soundcheck program referenced in the app-config.yaml:
 
 ```yaml
 ---
@@ -139,13 +139,13 @@ This is accomplished by defining the program in `soundcheck-programs.yaml`.  Thi
         - id: is_repo_private
           name: The GitHub repo is private
           description: >
-            All repos need to private.
+            All repos need to be private.
         - id: default_branch_is_main
           name: The default branch is main
           description: >
             Default branches should be named main
 ```
-Each of the above program checks coorespond to a check in the `soundcheck-checks.yaml`:
+Each of the above program checks correspond to a check in the `soundcheck-checks.yaml`:
 ```yaml
 ---
 - id: has_less_than_ten_open_issues
@@ -175,7 +175,7 @@ Each of the above program checks coorespond to a check in the `soundcheck-checks
     operator: equal
     value: main
   passedMessage: |
-    Default banch is main
+    Default branch is main
   failedMessage: |
     Change default branch to main
 ```
@@ -195,7 +195,7 @@ Note: The names of the checks in `soundcheck-checks.yaml` and `soundcheck-progra
     Ten or more open issues
 ```
 
-`default_branch_is_main` will verify that the given repository has less than ten open issues.  Under the hood, Soundcheck is calling the GitHub API https://api.github.com/repos/{org}/{repo} using the provided GitHub token.  An example *truncated* response is as follows:
+`has_less_than_ten_open_issues` will verify that the given repository has less than ten open issues.  Under the hood, Soundcheck is calling the GitHub API https://api.github.com/repos/{org}/{repo} using the provided GitHub token.  An example *truncated* response is as follows:
 
 ```json
 {
@@ -238,7 +238,7 @@ Note: The names of the checks in `soundcheck-checks.yaml` and `soundcheck-progra
 
 The GitHub Fact Collector will look at the value of `"open_issues"` and determine if the value is less than 10.
 
-The final piece of the Soundcheck program is the `github-facts-collectors.yaml`.  This file determine what facts will be collected about the elligible entities.
+The final piece of the Soundcheck program is the `github-facts-collectors.yaml`.  This file determines what facts will be collected about the eligible entities.
 
 ```yaml
 ---
@@ -255,7 +255,15 @@ collects:
     cache: true
 ```
 
-In this case the `RepositoryDetails` fact will be collected, and the name of the fact will be `repo_details`.  The cron value is `'* * * * *'`, which indicates fact will be collected every minute.  Every minute is **far** to frequent, but works great in demos :sweat_smile: .  Finally the cache duration is set to 2 hours.  This means something.
+In this case the `RepositoryDetails` fact will be collected, and the name of the fact will be `repo_details`.  The cron value is `'* * * * *'`, which indicates the fact will be collected every minute.  Every minute is **far** to frequent, but works great in demos :sweat_smile:.  Finally the cache duration is set to 2 hours:
+
+```yaml
+cache:
+  duration:
+    hours: 2
+```
+
+This means the fact itself will be cached for 2 hours.  As a result, if any check is executed during the next two hours, it will read the value in the cache instead of collecting the fact from its source.
 
 Now if backstage is started and the Soundcheck tab is opened, it should look like:
 
@@ -277,7 +285,7 @@ Three checks have been added to `soundcheck-checks.yaml`:
     factRef: scm:default/readme_and_catalog_info_files_exist_fact # The fact data to reference
     path: $.readme_exists # The path to the field to analyze
     operator: equal # Indicates the operation to apply
-    value: true # The desired value of the field indicated in path, above.
+    value: true # The desired value of the field indicated in the path, above.
 - id: has_catalog_info_file_check
   rule:
     factRef: scm:default/readme_and_catalog_info_files_exist_fact
@@ -384,7 +392,7 @@ Looking at the additions to the `soundcheck-programs.yaml`:
         - id: has_catalog_info_file_check
           name: Catalog-info exists
           description: >
-            Indicates the repo containsa a catalog-info.yaml.
+            Indicates the repo contains a catalog-info.yaml.
 - id: test-certified
   name: Test Certified
   ownerEntityRef: group:default/example-owner
@@ -416,6 +424,6 @@ This will make this check only visible on entities labeled with `python`
 
 In order to see this check in action, a python entity will need to be added to the catalog.  Using the register existing component button, register this [entity](https://github.com/ThayerAltman/simple-python-service/blob/master/catalog-info.yaml)
 
-After adding the entry, the Soundcheck tab for the entry whould look like:
+After adding the entry, the Soundcheck tab for the entry would look like:
 
 ![Test Certified Image](./pictures/test-certified.png)
