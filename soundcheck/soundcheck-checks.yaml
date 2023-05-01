@@ -47,3 +47,24 @@
     path: $.matches
     operator: equal
     value: true
+
+- id: less_than_4_branches
+  rule:
+    factRef: branch:default/branch_count
+    path: $.totalCount
+    operator: lessThan
+    value: 4
+  passedMessage: |
+    Less than 4 branches
+  failedMessage: |
+    4 or more branches
+- id: less_than_3_branches
+  rule:
+    factRef: branch:default/branch_count
+    path: $.totalCount
+    operator: lessThan
+    value: 3
+  passedMessage: |
+    Less than 3 branches
+  failedMessage: |
+    3 or more branches
