@@ -427,3 +427,185 @@ In order to see this check in action, a python entity will need to be added to t
 After adding the entry, the Soundcheck tab for the entry would look like:
 
 ![Test Certified Image](./pictures/test-certified.png)
+
+### Commit #6 [Add Custom Fact Collector](https://github.com/ThayerAltman/example-backstage/commit/8493e493dc9df3a6b78d62321b2a838fca82cd0d)
+
+This commit add a custom fact collector.  In this case it will collect the number of branches that have been created for this repo.  It will do that by calling the [GitHub GraphQL API](https://docs.github.com/en/graphql) via [Oktokit](https://github.com/octokit/graphql.js/#typescript).  Any web service call can be done here, this example will highlight how to use Backstage's internal credentials.  The checks being added are:
+
+1. The repo has less than 3 branches
+2. The repo has less than 4 branches
+
+The files added are similar to what was added in previous commits:
+
+1. New program in `soundcheck-program.yaml`
+2. New checks in `soundcheck-checks.yaml`
+3. New collector in `branch-facts-collector.yaml`
+
+**However** in this case there is also code added to facitlitate the checks.
+
+First lets look at the checks `soundcheck-checks.yaml`:
+
+```yaml
+- id: less_than_4_branches
+  rule:
+    factRef: branch:default/branch_count
+    path: $.totalCount
+    operator: lessThan
+    value: 4
+  passedMessage: |
+    Less than 4 branches
+  failedMessage: |
+    4 or more branches
+- id: less_than_3_branches
+  rule:
+    factRef: branch:default/branch_count
+    path: $.totalCount
+    operator: lessThan
+    value: 3
+  passedMessage: |
+    Less than 3 branches
+  failedMessage: |
+    3 or more branches
+```
+
+The `factRef` with value `branch:default/branch_count` coresponds to the collector `branch-facts-collector.yaml`:
+
+```yaml
+---
+frequency:
+  minutes: 1
+cache: # Defines if the collected facts should be cached, and if so for how long
+  duration:
+    hours: 2
+collects:
+  factName: branch_count
+  type: branchDescriptor 
+```
+
+This value also corresponds to some identifiers in the code.  Looking at the code, in `branchcount.ts`:
+
+```ts
+  async collect(
+    entities: Entity[],
+    _params?: { factRefs?: FactRef[]; refresh?: FactRef[] },
+  ): Promise<Fact[]> {
+    try {
+      const factRef: FactRef = stringifyFactRef({
+        name: 'branch_count',
+        scope: 'default',
+        source: 'branch',
+      });
+      return Promise.all(
+        entities
+          .filter(entity => isScmEntity(entity))
+          .map(async entity => {
+            const entityRef = stringifyEntityRef(entity);
+            const entityScmUrl = getEntityScmUrl(entity);
+            const gitUrl = parseGitUrl(entityScmUrl);
+
+            const { token } = await this.#credentialsProvider.getCredentials({ url: entityScmUrl });
+            const response = await graphql(
+              `
+              query numBranches($owner: String!, $repo: String!) {
+                repository(owner: $owner, name: $repo) {
+                  refs(first: 0, refPrefix: "refs/heads/") {
+                    totalCount
+                  }
+                }
+              }
+            `,
+              {
+                owner: gitUrl.owner,
+                repo: gitUrl.name,
+                headers: {
+                  authorization: 'Bearer ' + token,
+                },
+              }
+            ) as GraphQlQueryResponseData;
+            
+            console.log("BranchCountFactCollector: " + gitUrl.owner + ": " + gitUrl.name + ": " + "Total Count: "
+            + response["repository"]["refs"]["totalCount"]);
+
+            return this.buildFact(entityRef, factRef, response["repository"]["refs"]);
+          }),
+      );
+    } catch (e) {
+      this.#logger.error(`Failed to collect branch data with error: ${e}`);
+      return Promise.reject([]);
+    }
+  }
+```
+
+The `collect` function will get the fact that is to be used for the checks.  The token needed for authentication is retrieved here:
+
+```ts
+const { token } = await this.#credentialsProvider.getCredentials({ url: entityScmUrl });
+```
+
+Finally the following section will make outbound request:
+
+```ts
+            const response = await graphql(
+              `
+              query numBranches($owner: String!, $repo: String!) {
+                repository(owner: $owner, name: $repo) {
+                  refs(first: 0, refPrefix: "refs/heads/") {
+                    totalCount
+                  }
+                }
+              }
+            `,
+              {
+                owner: gitUrl.owner,
+                repo: gitUrl.name,
+                headers: {
+                  authorization: 'Bearer ' + token,
+                },
+              }
+            ) as GraphQlQueryResponseData;
+```
+
+The files `branchcountextractorsstore.ts` and `utils.ts` define how the configuration and schema work.
+
+The basic template for creating a custom fact collector is below:
+
+```ts
+import { FactCollector } from '@spotify/backstage-plugin-soundcheck-node';
+import { Entity } from '@backstage/catalog-model';
+import {
+  CollectionConfig,
+  Fact,
+  FactRef,
+} from '@spotify/backstage-plugin-soundcheck-common';
+​
+export class ExampleFactCollector implements FactCollector {
+  public static ID = 'example';
+​
+  public static create(): ExampleFactCollector {
+    return new ExampleFactCollector();
+  }
+​
+  collect(
+    entities: Entity[],
+    params?: { factRefs?: FactRef[]; refresh?: FactRef[] },
+  ): Promise<Fact[]> {
+    return Promise.resolve([]);
+  }
+​
+  getCollectionConfigs(): Promise<CollectionConfig[]> {
+    return Promise.resolve([]);
+  }
+​
+  getDataSchema(factRef: FactRef): Promise<string | undefined> {
+    return Promise.resolve(undefined);
+  }
+​
+  getFactNames(): Promise<string[]> {
+    return Promise.resolve([]);
+  }
+}
+```
+
+After starting Backstage, Soundcheck should look like:
+
+![Custom Fact Image](./pictures/custom-fact.png)
