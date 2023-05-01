@@ -263,7 +263,7 @@ cache:
     hours: 2
 ```
 
-This means the fact itself will be cached for 2 hours.  As a result, if any check is executed during the next two hours, it will read the value in the cache instead of collecting the fact from its source.
+This means the fact itself will be cached for 2 hours.  As a result, if any check is executed while the fact is still in the cache, it will read that value instead of collecting the fact from its source.
 
 Now if backstage is started and the Soundcheck tab is opened, it should look like:
 
