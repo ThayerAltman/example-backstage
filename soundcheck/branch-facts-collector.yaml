@@ -1,0 +1,9 @@
+---
+frequency:
+  minutes: 1
+cache: # Defines if the collected facts should be cached, and if so for how long
+  duration:
+    hours: 2
+collects:
+  factName: branch_count
+  type: branchDescriptor 

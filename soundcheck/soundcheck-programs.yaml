@@ -48,3 +48,22 @@
           filter:
             catalog:
               metadata.tags: python
+- id: number-of-branches
+  name: Number of Branches
+  ownerEntityRef: group:default/example-owner
+  description: >
+    Less branches is better
+  documentationURL: https://www.backstage.io
+  levels:
+    - ordinal: 1
+      checks:
+        - id: less_than_4_branches
+          name: Less Than 4 branches
+          description: >
+            Indicates whether the Entity has less than 4 branches
+    - ordinal: 2
+      checks:
+        - id: less_than_3_branches
+          name: Less Than 3 branches
+          description: >
+            Indicates whether the Entity has less than 3 branches 

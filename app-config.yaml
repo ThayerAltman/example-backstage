@@ -123,3 +123,5 @@ soundcheck:
       $include: ./soundcheck/github-facts-collectors.yaml
     scm:
       $include: ./soundcheck/scm-facts-collectors.yaml
+    branch:
+      $include: ./soundcheck/branch-facts-collector.yaml
