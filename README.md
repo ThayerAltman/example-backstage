@@ -112,6 +112,7 @@ In order to see Soundcheck in action, an entity will need to be added to the cat
 
 ### Commit #4: [Add GitHub Collector and Basic Program](https://github.com/ThayerAltman/example-backstage/commit/066bad9b34df78b293c90747d7544bac0b888123)
 
+More info can be found [here](https://www.npmjs.com/package/@spotify/backstage-plugin-soundcheck-backend-module-github).
 This commit adds a simple program that involves using the GitHub fact collector to verify the following:
 
 1. The repo has less than ten open issues
@@ -271,6 +272,7 @@ Now if backstage is started and the Soundcheck tab is opened, it should look lik
 
 ### Commit #5 [Adding SCM Fact Collector](https://github.com/ThayerAltman/example-backstage/commit/7ed1b9da2de46f42bc102a72b7856a9af32f4261)
 
+More info can be found [here](https://www.npmjs.com/package/@spotify/backstage-plugin-soundcheck-backend-module-scm).
 This commit adds another level to the basic program and adds a whole new program.  The checks added will verify that:
 
 1. The repo has a README.md
