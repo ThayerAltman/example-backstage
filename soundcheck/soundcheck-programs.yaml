@@ -1,18 +1,26 @@
 ---
-- id: basic-setup
-  name: Basic Setup
+- id: CatalogFact
+  name: Catalog Fact Collector Program
   ownerEntityRef: group:default/example-owner
   description: >
-    Improve quality and reliability of your software component
-    by measuring the use of testing best practices.
+    Uses GitHub Fact Collector to dervie facts.
   documentationURL: https://github.com/ThayerAltman/example-backstage/blob/main/README.md
   levels:
     - ordinal: 1
       checks:
-        - id: has_less_than_ten_open_issues
-          name: Less than 10 open issues
+        - id: has_required_tags
+          name: Repo has a required labels
           description: >
-            The service should have less than 10 open issues
+            Indicates whether your service is labelled correctly.
+- id: GitHubIntegration
+  name: GitHub Fact Collector Program
+  ownerEntityRef: group:default/example-owner
+  description: >
+    Uses GitHub Fact Collector to dervie facts.
+  documentationURL: https://github.com/ThayerAltman/example-backstage/blob/main/README.md
+  levels:
+    - ordinal: 1
+      checks:
         - id: is_repo_private
           name: The GitHub repo is private
           description: >
@@ -23,6 +31,19 @@
             Default branches should be named main
     - ordinal: 2
       checks:
+        - id: has_less_than_ten_open_issues
+          name: Less than 10 open issues
+          description: >
+            The service should have less than 10 open issues
+- id: SCMIntegration
+  name: SCM Fact Collector Program
+  ownerEntityRef: group:default/example-owner
+  description: >
+    Uses SCM Fact Collector to dervie facts.
+  documentationURL: https://github.com/ThayerAltman/example-backstage/blob/main/README.md
+  levels:
+    - ordinal: 1
+      checks:
         - id: has_readme_check
           name: Readme exists
           description: >
@@ -31,16 +52,6 @@
           name: Catalog-info exists
           description: >
             Indicates the repo containsa a catalog-info.yaml.
-- id: test-certified
-  name: Test Certified
-  ownerEntityRef: group:default/example-owner
-  description: >
-    Improve quality and reliability of your software component
-    by measuring the use of testing best practices.
-  documentationURL: https://www.backstage.io
-  levels:
-    - ordinal: 1
-      checks:
         - id: python_service_runs_tests
           name: The python service runs pytest
           description: >
@@ -48,8 +59,8 @@
           filter:
             catalog:
               metadata.tags: python
-- id: number-of-branches
-  name: Number of Branches
+- id: CustomFactCollector
+  name: Custom Fact Collector Program
   ownerEntityRef: group:default/example-owner
   description: >
     Less branches is better
@@ -66,4 +77,4 @@
         - id: less_than_3_branches
           name: Less Than 3 branches
           description: >
-            Indicates whether the Entity has less than 3 branches 
+            Indicates whether the Entity has less than 3 branches

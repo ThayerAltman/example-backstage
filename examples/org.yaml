@@ -5,16 +5,7 @@ kind: User
 metadata:
   name: guest
 spec:
-  memberOf: [web, guests]
----
-# https://backstage.io/docs/features/software-catalog/descriptor-format#kind-group
-apiVersion: backstage.io/v1alpha1
-kind: Group
-metadata:
-  name: guests
-spec:
-  type: team
-  children: []
+  memberOf: [web, plugins]
 ---
 # https://backstage.io/docs/features/software-catalog/descriptor-format#kind-group
 apiVersion: backstage.io/v1alpha1
@@ -23,7 +14,7 @@ metadata:
   name: web
 spec:
   type: team
-  children: [web-backend]
+  children: [web-backend, plugins]
 ---
 # https://backstage.io/docs/features/software-catalog/descriptor-format#kind-group
 apiVersion: backstage.io/v1alpha1
@@ -33,4 +24,14 @@ metadata:
 spec:
   type: team
   children: []
+---
+# https://backstage.io/docs/features/software-catalog/descriptor-format#kind-group
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: plugins
+spec:
+  type: team
+  children: []
+---
 

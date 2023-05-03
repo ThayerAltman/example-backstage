@@ -68,3 +68,14 @@
     Less than 3 branches
   failedMessage: |
     3 or more branches
+- id: has_required_tags
+  rule:
+    any:
+      - factRef: catalog:default/entity_descriptor
+        path: $.metadata.tags
+        operator: contains
+        value: java
+      - factRef: catalog:default/entity_descriptor
+        path: $.metadata.tags
+        operator: contains
+        value: data
