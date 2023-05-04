@@ -432,7 +432,7 @@ After adding the entry, the Soundcheck tab for the entry would look like:
 
 ![Test Certified Image](./pictures/test-certified.png)
 
-### Commit #6 [Add Custom Fact Collector](https://github.com/ThayerAltman/example-backstage/commit/8493e493dc9df3a6b78d62321b2a838fca82cd0d)
+### Commit #6 [Add Custom Fact Collector](https://github.com/ThayerAltman/example-backstage/commit/79e8321466440f1769ba948445b9c93ff3908a2a)
 
 This commit adds a custom fact collector.  In this case it will collect the number of branches that have been created for this repo.  It will do that by calling the [GitHub GraphQL API](https://docs.github.com/en/graphql) via [Oktokit](https://github.com/octokit/graphql.js/#typescript).  Any web service call can be done here, this example will highlight how to use Backstage's internal credentials.  The checks being added are:
 
