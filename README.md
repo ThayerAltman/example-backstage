@@ -627,3 +627,49 @@ After starting Backstage, Soundcheck should look like:
 ![Custom Fact Image](./pictures/custom-fact.png)
 
 ### Commit #7: [Add Branch Protection Checks](https://github.com/ThayerAltman/example-backstage/commit/9898ae2c0af84ff1bbade6f1ea7a3b57d5948dc6)
+
+This commit add checks for regarding branch proteciton of GitHub repos.  More documentation can be found [here](https://www.npmjs.com/package/@spotify/backstage-plugin-soundcheck-backend-module-github)
+
+These checks follows the same pattern as [Commit #4: Add GitHub Collector and Basic Program](#commit-4-add-github-collector-and-basic-program).  Under the hood Soundcheck will call the [get-branch-protection](https://docs.github.com/en/rest/branches/branch-protection?apiVersion=2022-11-28) GitHub API.  Example response:
+
+```json
+{
+    "url": "https://api.github.com/repos/ThayerAltman/node-app/branches/master/protection",
+    "required_pull_request_reviews": {
+        "url": "https://api.github.com/repos/ThayerAltman/node-app/branches/master/protection/required_pull_request_reviews",
+        "dismiss_stale_reviews": false,
+        "require_code_owner_reviews": true,
+        "require_last_push_approval": false,
+        "required_approving_review_count": 2
+    },
+    "required_signatures": {
+        "url": "https://api.github.com/repos/ThayerAltman/node-app/branches/master/protection/required_signatures",
+        "enabled": false
+    },
+    "enforce_admins": {
+        "url": "https://api.github.com/repos/ThayerAltman/node-app/branches/master/protection/enforce_admins",
+        "enabled": false
+    },
+    "required_linear_history": {
+        "enabled": false
+    },
+    "allow_force_pushes": {
+        "enabled": false
+    },
+    "allow_deletions": {
+        "enabled": false
+    },
+    "block_creations": {
+        "enabled": false
+    },
+    "required_conversation_resolution": {
+        "enabled": false
+    },
+    "lock_branch": {
+        "enabled": false
+    },
+    "allow_fork_syncing": {
+        "enabled": false
+    }
+}
+```
