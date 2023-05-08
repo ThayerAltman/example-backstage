@@ -66,4 +66,24 @@
         - id: less_than_3_branches
           name: Less Than 3 branches
           description: >
-            Indicates whether the Entity has less than 3 branches 
+            Indicates whether the Entity has less than 3 branches
+- id: branch-protections
+  name: Branch Protections
+  ownerEntityRef: group:default/web
+  description: >
+    Branch protection example
+  documentationURL: https://docs.github.com/en/rest/branches/branch-protection?apiVersion=2022-11-28
+  levels:
+    - ordinal: 1
+      checks:
+        - id: require-code-owner-review
+          name: Require Code Owner Review
+          description: >
+            Indicates whether the entity requires code owner reviews
+    - ordinal: 2
+      checks:
+        - id: approving-review-count
+          name: More than 1 Reviewer
+          description: >
+            Indicates whether the entity requires more than 1 code reviewer
+        

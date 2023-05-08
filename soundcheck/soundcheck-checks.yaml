@@ -47,7 +47,6 @@
     path: $.matches
     operator: equal
     value: true
-
 - id: less_than_4_branches
   rule:
     factRef: branch:default/branch_count
@@ -68,3 +67,23 @@
     Less than 3 branches
   failedMessage: |
     3 or more branches
+- id: require-code-owner-review
+  rule:
+    factRef: github:default/protections
+    path: $.required_pull_request_reviews.require_code_owner_reviews
+    operator: equal
+    value: true
+  passedMessage: |
+    require_code_owner_reviews true
+  failedMessage: |
+    require_code_owner_reviews false
+- id: approving-review-count
+  rule:
+    factRef: github:default/protections
+    path: $.required_pull_request_reviews.required_approving_review_count
+    operator: greaterThan
+    value: 1
+  passedMessage: |
+    required_approving_review_count greaterThan 1
+  failedMessage: |
+    required_approving_review_count lessThan 2

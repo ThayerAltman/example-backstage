@@ -10,3 +10,6 @@ collects:
   - factName: repo_details
     type: RepositoryDetails
     cache: true
+  - factName: protections
+    type: BranchProtections
+    cache: true
