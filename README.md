@@ -9,6 +9,16 @@ yarn install
 yarn dev
 ```
 
+## Contents
+
+- [Commit #1: Create Repo](#commit-1-create-repo)
+- [Commit #2: Configuration](#commit-2-configuration)
+- [Commit #3: Soundcheck Installation and Setup](#commit-3-soundcheck-installation-and-setup)
+- [Commit #4: Add GitHub Collector and Basic Program](#commit-4-add-github-collector-and-basic-program)
+- [Commit #5: Adding SCM Fact Collector](#commit-5-adding-scm-fact-collector)
+- [Commit #6: Add Custom Fact Collector](#commit-6-add-custom-fact-collector)
+- [Commit #7: Add Branch Protection Checks](#commit-7-add-branch-protection-checks)
+
 ## Initial Backstage Setup
 
 ### Commit #1: [Create Repo](https://github.com/ThayerAltman/example-backstage/commit/00a9be8c1694e2cc911b8e94aae9ba342dfb8c6e)
@@ -271,7 +281,7 @@ Now if backstage is started and the Soundcheck tab is opened, it should look lik
 
 ![First Checks Image](./pictures/first-checks.png)
 
-### Commit #5 [Adding SCM Fact Collector](https://github.com/ThayerAltman/example-backstage/commit/7ed1b9da2de46f42bc102a72b7856a9af32f4261)
+### Commit #5: [Adding SCM Fact Collector](https://github.com/ThayerAltman/example-backstage/commit/7ed1b9da2de46f42bc102a72b7856a9af32f4261)
 
 More info can be found [here](https://www.npmjs.com/package/@spotify/backstage-plugin-soundcheck-backend-module-scm).
 
@@ -432,7 +442,7 @@ After adding the entry, the Soundcheck tab for the entry would look like:
 
 ![Test Certified Image](./pictures/test-certified.png)
 
-### Commit #6 [Add Custom Fact Collector](https://github.com/ThayerAltman/example-backstage/commit/79e8321466440f1769ba948445b9c93ff3908a2a)
+### Commit #6: [Add Custom Fact Collector](https://github.com/ThayerAltman/example-backstage/commit/79e8321466440f1769ba948445b9c93ff3908a2a)
 
 This commit adds a custom fact collector.  In this case it will collect the number of branches that have been created for this repo.  It will do that by calling the [GitHub GraphQL API](https://docs.github.com/en/graphql) via [Oktokit](https://github.com/octokit/graphql.js/#typescript).  Any web service call can be done here, this example will highlight how to use Backstage's internal credentials.  The checks being added are:
 
@@ -615,3 +625,5 @@ export class ExampleFactCollector implements FactCollector {
 After starting Backstage, Soundcheck should look like:
 
 ![Custom Fact Image](./pictures/custom-fact.png)
+
+### Commit #7: [Add Branch Protection Checks](https://github.com/ThayerAltman/example-backstage/commit/9898ae2c0af84ff1bbade6f1ea7a3b57d5948dc6)
