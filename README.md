@@ -654,7 +654,7 @@ After starting Backstage, Soundcheck should look like:
 
 ### Commit #7: [Add Branch Protection Checks](https://github.com/ThayerAltman/example-backstage/commit/9898ae2c0af84ff1bbade6f1ea7a3b57d5948dc6)
 
-This commit add checks for regarding branch proteciton of GitHub repos.  More documentation can be found [here](https://www.npmjs.com/package/@spotify/backstage-plugin-soundcheck-backend-module-github)
+This commit adds checks for branch protection of GitHub repos.  More documentation can be found [here](https://www.npmjs.com/package/@spotify/backstage-plugin-soundcheck-backend-module-github)
 
 These checks follows the same pattern as [Commit #4: Add GitHub Collector and Basic Program](#commit-4-add-github-collector-and-basic-program).  Under the hood Soundcheck will call the [get-branch-protection](https://docs.github.com/en/rest/branches/branch-protection?apiVersion=2022-11-28) GitHub API.  Example response:
 
@@ -699,3 +699,71 @@ These checks follows the same pattern as [Commit #4: Add GitHub Collector and Ba
     }
 }
 ```
+
+### Commit #8: [Add Check to be used with POST Method](https://github.com/ThayerAltman/example-backstage/commit/af6a67ff6e54d51756384c86ade367797a57b1f6)
+
+This commit adds a check to be used with the POST method of validating checks in Soundcheck.  The check added to soundcheck-checks.yaml is as follows:
+
+```yaml
+- id: github_actions_tests_passing
+  rule:
+    factRef: custom:default/github_actions_test
+    path: $.testPassed
+    operator: equal
+    value: true
+```
+
+This is a custom fact that will not have a collector associated with it.  Soundcheck will not cache the facts for this check, but only save the result of the checks.  The check is added to the program below:
+
+```yaml
+- ordinal: 2
+  checks:
+    - id: github_actions_tests_passing
+      name: CI/CD Tests passing
+      description: >
+        The last tests run in GitHub Actions were successful.
+```
+
+The goal of this check is to fail when the tests running in a GitHub workflow fail.  When the tests fail, GitHub will make a POST request to our backstage indicating that the tests have failed.  Additionally the program was changed to only be relevant to services with the python flag.
+
+The POST message that will fail or pass the check is below:
+`POST localhost:7007/api/soundcheck/facts`
+
+```json
+{
+    "facts": [
+        {
+            "factRef": "custom:default/github_actions_test",
+            "entityRef": "component:default/simple-python-service",
+            "data": {
+                "testPassed": true
+            }
+        }
+    ]
+}
+```
+
+or curl:
+
+```bash
+curl                                        \
+-H "Content-Type: application/json"         \
+-X POST localhost:7007/api/soundcheck/facts \
+-d @- << EOF
+{                                                            
+    "facts": [                                                        
+        {                                                             
+            "factRef": "custom:default/github_actions_test",          
+            "entityRef": "component:default/simple-python-service",   
+            "data": {                                                 
+                "testPassed": true                                    
+            }                                                         
+        }                                                             
+    ]                                                                 
+}
+EOF
+```
+
+Sending the above request to backstage should result in the following test passing or failing depending on the value of `testPassed`:
+
+![Post Check Image](./pictures/post-check.png)
