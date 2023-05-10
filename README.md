@@ -11,6 +11,7 @@ This is meant to be a guide for getting Soundcheck up and running.  Each section
 - [Commit #5: Add SCM Fact Collector](#commit-5-add-scm-fact-collector)
 - [Commit #6: Add Custom Fact Collector](#commit-6-add-custom-fact-collector)
 - [Commit #7: Add Branch Protection Checks](#commit-7-add-branch-protection-checks)
+- [Commit #8: Add POST Only Check](#commit-8-add-post-only-check)
 
 To start the app, run:
 
@@ -700,7 +701,7 @@ These checks follows the same pattern as [Commit #4: Add GitHub Collector and Ba
 }
 ```
 
-### Commit #8: [Add Check to be used with POST Method](https://github.com/ThayerAltman/example-backstage/commit/af6a67ff6e54d51756384c86ade367797a57b1f6)
+### Commit #8: [Add POST Only Check](https://github.com/ThayerAltman/example-backstage/commit/af6a67ff6e54d51756384c86ade367797a57b1f6)
 
 This commit adds a check to be used with the POST method of validating checks in Soundcheck.  The check added to soundcheck-checks.yaml is as follows:
 
