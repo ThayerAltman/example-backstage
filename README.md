@@ -705,7 +705,7 @@ These checks follows the same pattern as [Commit #4: Add GitHub Collector and Ba
 
 ### Commit #8: [Add POST Only Check](https://github.com/ThayerAltman/example-backstage/commit/af6a67ff6e54d51756384c86ade367797a57b1f6)
 
-This commit adds a check to be used with the POST method of validating checks in Soundcheck.  The check added to soundcheck-checks.yaml is as follows:
+This commit adds a check to be used with the POST method of validating checks in Soundcheck.  More information can be found [here](https://www.npmjs.com/package/@spotify/backstage-plugin-soundcheck-backend#facts-api).  The check added to soundcheck-checks.yaml is as follows:
 
 ```yaml
 - id: github_actions_tests_passing
