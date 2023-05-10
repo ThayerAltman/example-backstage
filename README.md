@@ -2,7 +2,7 @@
 
 This is meant to be a guide for getting Soundcheck up and running.  Each section of the README walks through a commit done to install and use Soundcheck.  The application can be run from any commit in this repo.
 
-Skip to any section below for a commit highlighting that specific intent.
+Skip to any section below for a commit highlighting that specific intent.  Each section has a link the commit that accomplished the intent.
 
 ## Contents
 
