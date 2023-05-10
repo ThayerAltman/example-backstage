@@ -87,3 +87,9 @@
     required_approving_review_count greaterThan 1
   failedMessage: |
     required_approving_review_count lessThan 2
+- id: github_actions_tests_passing
+  rule:
+    factRef: custom:default/github_actions_test
+    path: $.testPassed
+    operator: equal
+    value: true

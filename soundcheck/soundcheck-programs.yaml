@@ -38,6 +38,9 @@
     Improve quality and reliability of your software component
     by measuring the use of testing best practices.
   documentationURL: https://www.backstage.io
+  filter:
+    catalog:
+      metadata.tags: python
   levels:
     - ordinal: 1
       checks:
@@ -45,9 +48,12 @@
           name: The python service runs pytest
           description: >
             This service is currently running pytest as part of its GitHub actions workflow as defined in the build.yaml
-          filter:
-            catalog:
-              metadata.tags: python
+    - ordinal: 2
+      checks:
+        - id: github_actions_tests_passing
+          name: CI/CD Tests passing
+          description: >
+            The last tests run in GitHub Actions was successful.
 - id: number-of-branches
   name: Number of Branches
   ownerEntityRef: group:default/example-owner
