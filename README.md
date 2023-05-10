@@ -1,13 +1,6 @@
 # [Backstage and Soundcheck Tutorial](https://backstage.io)
 
-This is meant to be a guide for getting Soundcheck up and running.  Each section of the README walks through a commit done to install and use Soundcheck.  The application can be run from any commit in this repo.
-
-To start the app, run:
-
-```sh
-yarn install
-yarn dev
-```
+This is meant to be a guide for getting Soundcheck up and running.  Each section of the README walks through a commit done to install and use Soundcheck.  The application can be run from any commit in this repo.  Skip to any section below for a commit highlighting that specific intent.
 
 ## Contents
 
@@ -15,9 +8,16 @@ yarn dev
 - [Commit #2: Configuration](#commit-2-configuration)
 - [Commit #3: Soundcheck Installation and Setup](#commit-3-soundcheck-installation-and-setup)
 - [Commit #4: Add GitHub Collector and Basic Program](#commit-4-add-github-collector-and-basic-program)
-- [Commit #5: Adding SCM Fact Collector](#commit-5-adding-scm-fact-collector)
+- [Commit #5: Add SCM Fact Collector](#commit-5-add-scm-fact-collector)
 - [Commit #6: Add Custom Fact Collector](#commit-6-add-custom-fact-collector)
 - [Commit #7: Add Branch Protection Checks](#commit-7-add-branch-protection-checks)
+
+To start the app, run:
+
+```sh
+yarn install
+yarn dev
+```
 
 ## Initial Backstage Setup
 
@@ -70,7 +70,7 @@ spotify:
 
 The `<license_key>` can be found by going to [Backstage Account Overview](https://backstage.spotify.com/account/)
 
-### Commit #3: [Soundcheck Installation and Setup](https://github.com/ThayerAltman/example-backstage/commit/b145d6aacd51fb00189dfd542d8b0eb41e8fbc97)
+### Commit #3: [Soundcheck Installation and Setup](https://github.com/ThayerAltman/example-backstage/commit/bbfa3ffd0990197b3aa7355016a40c2045340fee)
 
 This commit consists of following the Soundcheck installation instructions:
 
@@ -87,7 +87,7 @@ As well as the tab menu when viewing an entity:
 
 ![Tabe Menu Image](./pictures/tab-menu.png)
 
-Changes made to the [app-config.yaml](https://github.com/ThayerAltman/example-backstage/commit/bbfa3ffd0990197b3aa7355016a40c2045340fee#diff-ec52f22d476ccc33271d11c4f08a68369614378aa0cb9aa5aba2f08943cd68df) include adding:
+Changes made to the [app-config.yaml](https://github.com/ThayerAltman/example-backstage/commit/bbfa3ffd0990197b3aa7355016a40c2045340fee#diff-3ccad462b80d2ba6c9abe6d5f1ba474dad9ae8b919056a51aadf383e49bafdc1) include adding:
 
 ```yaml
 soundcheck:
@@ -277,11 +277,37 @@ cache:
 
 This means the fact itself will be cached for 2 hours.  As a result, if any check is executed while the fact is still in the cache, it will read that value instead of collecting the fact from its source.
 
+The `app-config.yaml` is where all of the above files are configured to be part of Soundcheck:
+
+```yaml
+soundcheck:
+  programs:
+    $include: ./soundcheck/soundcheck-programs.yaml
+  checks:
+    $include: ./soundcheck/soundcheck-checks.yaml
+  collectors:
+    github:
+      $include: ./soundcheck/github-facts-collectors.yaml
+```
+
+The `programs`, `checks`, and `collectors` are referenced using the `$include` operator.  The configuration for these sections can be defined in the `app-config.yaml` in their appropriate section or in another file and included as is done here.  Example below shows a check defined in the app-config.yaml:
+
+```yaml
+soundcheck:
+  checks:
+    - id: custom_fact_check
+      rule:
+        factRef: custom:default/github_custom_fact
+        path: $.testPassed
+        operator: equal
+        value: true
+```
+
 Now if backstage is started and the Soundcheck tab is opened, it should look like:
 
 ![First Checks Image](./pictures/first-checks.png)
 
-### Commit #5: [Adding SCM Fact Collector](https://github.com/ThayerAltman/example-backstage/commit/7ed1b9da2de46f42bc102a72b7856a9af32f4261)
+### Commit #5: [Add SCM Fact Collector](https://github.com/ThayerAltman/example-backstage/commit/7ed1b9da2de46f42bc102a72b7856a9af32f4261)
 
 More info can be found [here](https://www.npmjs.com/package/@spotify/backstage-plugin-soundcheck-backend-module-scm).
 
