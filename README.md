@@ -14,6 +14,7 @@ Skip to any section below for a commit highlighting that specific intent.  Each 
 - [Commit #6: Add Custom Fact Collector](#commit-6-add-custom-fact-collector)
 - [Commit #7: Add Branch Protection Checks](#commit-7-add-branch-protection-checks)
 - [Commit #8: Add POST Only Check](#commit-8-add-post-only-check)
+- [Commit #9: Add Catalog Collector](#commit-9-add-catalog-collector)
 
 To start the app, run:
 
@@ -771,3 +772,68 @@ EOF
 Sending the above request to backstage should result in the following test passing or failing depending on the value of `testPassed`:
 
 ![Post Check Image](./pictures/post-check.png)
+
+### Commit #9: [Add Catalog Collector](https://github.com/ThayerAltman/example-backstage/commit/71ab8ae7e6587440fadeff6022fdb131f5d6dc8e)
+
+This commit adds two catalog checks.  They will verify if certain keys are present and set to certain values in the `catalog-info.yaml` file.  The two checks added were:
+
+```yaml
+- id: lifecycle_defined
+  rule:
+    any:
+      - factRef: catalog:default/entity_descriptor
+        path: $.spec.lifecycle
+        operator: equal
+        value: experimental
+      - factRef: catalog:default/entity_descriptor
+        path: $.spec.lifecycle
+        operator: equal
+        value: production
+  schedule:
+    frequency:
+      cron: '* * * * *'
+    filter:
+      kind: 'Component'
+- id: has_pagerduty_integration_key
+  rule:
+    factRef: catalog:default/entity_descriptor
+    path: $.metadata.annotations["pagerduty.com/integration-key"]
+    operator: matches
+    value: .+
+  schedule:
+    frequency:
+      cron: '* * * * *'
+    filter:
+      kind: 'Component'
+```
+
+`lifecycle_defined` will pass if `spec.lifecycle` is defined and either `experimental` or `production`.  Below is an example of a `catalog-info.yaml` that will cause this check to pass:
+
+```yaml
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: "simple-python-service"
+  tags: [python]
+  languages: [python]
+  annotations:
+    pagerduty.com/integration-key: 123456789abcdef1234567890abcdef
+spec:
+  type: service
+  owner: group:web-backend
+  lifecycle: production
+```
+
+`has_pagerduty_integration_key` will pass if `metadata.annotations["pagerduty.com/integration-key"]` is defined.  The example `catalog-info.yaml` above will also cause this check to pass.
+
+__In order for catalog facts to be collected, a `schedule` with `filter` is needed.__
+
+```yaml
+  schedule:
+    frequency:
+      cron: '* * * * *'
+    filter:
+      kind: 'Component'
+```
+
+Since the collector for catalog information is built into Soundcheck there is no need for a collector.yaml file.  As a result, adding the schedule to the check is how Soundcheck is told when to collect these facts.  Additionally, the filter informs Soundcheck which type of entities to collect these facts from.
