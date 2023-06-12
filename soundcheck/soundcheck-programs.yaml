@@ -30,7 +30,15 @@
         - id: has_catalog_info_file_check
           name: Catalog-info exists
           description: >
-            Indicates the repo containsa a catalog-info.yaml.
+            Indicates the repo contains a catalog-info.yaml.
+        - id: lifecycle_defined
+          name: Has component lifecycle correctly defined.
+          description: >
+            Indicates whether the catalog-info.yaml has the lifecycle defined.
+        - id: has_pagerduty_integration_key
+          name: Has component PagerDuty key defiend.
+          description: >
+            Indicates whether the PagerDuty key is defined for the component.
 - id: test-certified
   name: Test Certified
   ownerEntityRef: group:default/example-owner

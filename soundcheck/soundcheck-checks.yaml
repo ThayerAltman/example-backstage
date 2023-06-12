@@ -93,3 +93,30 @@
     path: $.testPassed
     operator: equal
     value: true
+- id: lifecycle_defined
+  rule:
+    any:
+      - factRef: catalog:default/entity_descriptor
+        path: $.spec.lifecycle
+        operator: equal
+        value: experimental
+      - factRef: catalog:default/entity_descriptor
+        path: $.spec.lifecycle
+        operator: equal
+        value: production
+  schedule:
+    frequency:
+      cron: '* * * * *'
+    filter:
+      kind: 'Component'
+- id: has_pagerduty_integration_key
+  rule:
+    factRef: catalog:default/entity_descriptor
+    path: $.metadata.annotations["pagerduty.com/integration-key"]
+    operator: matches
+    value: .+
+  schedule:
+    frequency:
+      cron: '* * * * *'
+    filter:
+      kind: 'Component'
