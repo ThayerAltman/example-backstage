@@ -14,7 +14,7 @@ Skip to any section below for a commit highlighting that specific intent.  Each 
 - [Commit #6: Add Custom Fact Collector](#commit-6-add-custom-fact-collector)
 - [Commit #7: Add Branch Protection Checks](#commit-7-add-branch-protection-checks)
 - [Commit #8: Add POST Only Check](#commit-8-add-post-only-check)
-- [Commit #9: Add Catalog Collector](#commit-9-add-catalog-collector)
+- [Commit #9: Add Catalog Fact Collector](#commit-9-add-catalog-fact-collector)
 
 To start the app, run:
 
@@ -773,7 +773,7 @@ Sending the above request to backstage should result in the following test passi
 
 ![Post Check Image](./pictures/post-check.png)
 
-### Commit #9: [Add Catalog Collector](https://github.com/ThayerAltman/example-backstage/commit/71ab8ae7e6587440fadeff6022fdb131f5d6dc8e)
+### Commit #9: [Add Catalog Fact Collector](https://github.com/ThayerAltman/example-backstage/commit/71ab8ae7e6587440fadeff6022fdb131f5d6dc8e)
 
 This commit adds two catalog checks.  They will verify if certain keys are present and set to certain values in the `catalog-info.yaml` file.  The two checks added were:
 
