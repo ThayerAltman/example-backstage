@@ -120,3 +120,35 @@
       cron: '* * * * *'
     filter:
       kind: 'Component'
+- id: is_level_one_certified_branch_protections_and_number
+  rule:
+    all:
+      - factRef: soundcheck:default/program/branch-protections
+        path: $.highestLevel.ordinal
+        operator: greaterThanInclusive
+        value: 1
+      - factRef: soundcheck:default/program/number-of-branches
+        path: $.highestLevel.ordinal
+        operator: greaterThanInclusive
+        value: 1
+  schedule:
+    frequency:
+      cron: '* * * * *'
+    filter:
+      kind: 'Component'
+- id: is_level_two_certified_branch_protections_and_number
+  rule:
+    all:
+      - factRef: soundcheck:default/program/branch-protections
+        path: $.highestLevel.ordinal
+        operator: greaterThanInclusive
+        value: 2
+      - factRef: soundcheck:default/program/number-of-branches
+        path: $.highestLevel.ordinal
+        operator: greaterThanInclusive
+        value: 2
+  schedule:
+    frequency:
+      cron: '* * * * *'
+    filter:
+      kind: 'Component'
