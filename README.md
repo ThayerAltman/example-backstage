@@ -15,6 +15,7 @@ Skip to any section below for a commit highlighting that specific intent.  Each 
 - [Commit #7: Add Branch Protection Checks](#commit-7-add-branch-protection-checks)
 - [Commit #8: Add POST Only Check](#commit-8-add-post-only-check)
 - [Commit #9: Add Catalog Fact Collector](#commit-9-add-catalog-fact-collector)
+- [Commit #10: Add Soundcheck Fact Collector](#commit-10-add-soundcheck-collector)
 
 To start the app, run:
 
