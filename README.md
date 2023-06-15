@@ -837,3 +837,55 @@ __In order for catalog facts to be collected, a `schedule` with `filter` is need
 ```
 
 Since the collector for catalog information is built into Soundcheck there is no need for a collector.yaml file.  As a result, adding the schedule to the check is how Soundcheck is told when to collect these facts.  Additionally, the filter informs Soundcheck which type of entities to collect these facts from.
+
+### Commit #10: [Add Soundcheck Collector](https://github.com/ThayerAltman/example-backstage/commit/b7c416a5d6f3e44706c4b38fa7f6d4bb2d0801dc)
+
+This commits add two Soundcheck checks.  These checks will aggregate the results of other Soundcheck programs.  Both checks do roughly the same thing, looking at the first check:
+
+```yaml
+- id: is_level_one_certified_branch_protections_and_number
+  rule:
+    all:
+      - factRef: soundcheck:default/program/branch-protections
+        path: $.highestLevel.ordinal
+        operator: greaterThanInclusive
+        value: 1
+      - factRef: soundcheck:default/program/number-of-branches
+        path: $.highestLevel.ordinal
+        operator: greaterThanInclusive
+        value: 1
+  schedule:
+    frequency:
+      cron: '* * * * *'
+    filter:
+      kind: 'Component'
+```
+
+Similar to the Catalog check, this check does not have a dedicated collector yaml file.  As a result, it requires a `schedule` with a `filter` and `frequency`.  This check will look at the certification level of two Soundcheck programs `branch-protections` and `number-of-branches`.  It will pass if __both__ programs have at least certification level 1 for a given entity.  
+
+In addition to `$.highestLevel.ordinal` there are other fields that can be tested against.  Below is the schema for a certification found in `node_modules/@spotify/backstage-plugin-soundcheck-common/dist/index.cjs.js`:
+
+```js
+  type Certification {
+    entityRef: String!
+    program: Program!
+    levels: [LevelResult!]!
+    highestLevel: LevelResult
+  }
+
+...
+
+  type LevelResult {
+    ordinal: Int!
+    name: String!
+    badge: Badge
+    description: String
+    checks: [CheckResult!]!
+    certified: Boolean
+    entityRef: String!
+  }
+```
+
+The above checks with the `two-programs-aggregate` program result in the following Soundcheck page:
+
+![Aggregate Program Image](./pictures/aggregate-program.png)
