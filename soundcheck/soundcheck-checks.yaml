@@ -79,3 +79,8 @@
         path: $.metadata.tags
         operator: contains
         value: data
+  schedule:
+    frequency:
+      cron: '* * * * *'
+    filter:
+      kind: 'Component'
