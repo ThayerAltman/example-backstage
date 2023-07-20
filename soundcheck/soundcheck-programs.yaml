@@ -17,6 +17,10 @@
           name: The GitHub repo is private
           description: >
             All repos need to private.
+        - id: has_description
+          name: has_description
+          description: >
+            has_description
         - id: default_branch_is_main
           name: The default branch is main
           description: >
