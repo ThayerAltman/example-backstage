@@ -1,0 +1,44 @@
+  id: basic-setup
+  name: Basic Setup
+  ownerEntityRef: group:default/example-owner
+  description: >
+    Improve quality and reliability of your software component
+    by measuring the use of testing best practices.
+  documentationURL: https://github.com/ThayerAltman/example-backstage/blob/main/README.md
+  levels:
+    - ordinal: 1
+      checks:
+        - id: has_less_than_ten_open_issues
+          name: Less than 10 open issues
+          description: >
+            The service should have less than 10 open issues
+        - id: is_repo_private
+          name: The GitHub repo is private
+          description: >
+            All repos need to private.
+        - id: has_description
+          name: has_description
+          description: >
+            has_description
+        - id: default_branch_is_main
+          name: The default branch is main
+          description: >
+            Default branches should be named main
+    - ordinal: 2
+      checks:
+        - id: has_readme_check
+          name: Readme exists
+          description: >
+            Indicates whether there is a readme in the repo.
+        - id: has_catalog_info_file_check
+          name: Catalog-info exists
+          description: >
+            Indicates the repo contains a catalog-info.yaml.
+        - id: lifecycle_defined
+          name: Has component lifecycle correctly defined.
+          description: >
+            Indicates whether the catalog-info.yaml has the lifecycle defined.
+        - id: has_pagerduty_integration_key
+          name: Has component PagerDuty key defiend.
+          description: >
+            Indicates whether the PagerDuty key is defined for the component.

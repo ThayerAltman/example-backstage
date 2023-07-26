@@ -115,7 +115,8 @@ catalog:
     #     - allow: [User, Group]
 soundcheck:
   programs:
-    $include: ./soundcheck/soundcheck-programs.yaml
+    - $include: ./soundcheck/soundcheck-program-test-certified.yaml
+    - $include: ./soundcheck/soundcheck-program-basic-setup.yaml
   checks:
     $include: ./soundcheck/soundcheck-checks.yaml
   collectors:
