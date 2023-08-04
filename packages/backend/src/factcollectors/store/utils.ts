@@ -3,8 +3,8 @@ import {
   CacheSchema,
   FilterSchema,
   FrequencySchema,
-} from "@spotify/backstage-plugin-soundcheck-common";
-import { z } from "zod";
+} from '@spotify/backstage-plugin-soundcheck-common';
+import { z } from 'zod';
 
 /**
  * Builds a schema for a fact collector.

@@ -1,11 +1,11 @@
-import { ExtractorsStore } from "@spotify/backstage-plugin-soundcheck-node";
-import { Logger } from "winston";
-import { Config } from "@backstage/config";
+import { ExtractorsStore } from '@spotify/backstage-plugin-soundcheck-node';
+import { Logger } from 'winston';
+import { Config } from '@backstage/config';
 import {
   buildExtractorConfigMap,
   ExtractorConfig,
-} from "@spotify/backstage-plugin-soundcheck-common";
-import { BranchCountFactCollectorSchema } from "./utils";
+} from '@spotify/backstage-plugin-soundcheck-common';
+import { BranchCountFactCollectorSchema } from './utils';
 
 /**
  * Extractor store specifically for handling branch data.
@@ -52,7 +52,7 @@ export class BranchCountExtractorsStore implements ExtractorsStore {
    */
   #parseExtractorSchemaTypesFromConfig(config: Config) {
     // Retrieve the 'soundcheck.collectors.branch' configuration from the app-config.yaml file if it exists
-    const collectors = config.getOptional("soundcheck.collectors.branch");
+    const collectors = config.getOptional('soundcheck.collectors.branch');
 
     // branch collection not configured, so nothing to do.
     if (!collectors) {
