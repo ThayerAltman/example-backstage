@@ -1,20 +1,36 @@
-import { ExtractorsStore } from '@spotify/backstage-plugin-soundcheck-node';
-import { Logger } from 'winston';
-import { Config } from '@backstage/config';
+import { ExtractorsStore } from "@spotify/backstage-plugin-soundcheck-node";
+import { Logger } from "winston";
+import { Config } from "@backstage/config";
 import {
   buildExtractorConfigMap,
   ExtractorConfig,
-} from '@spotify/backstage-plugin-soundcheck-common';
-import { BranchCountFactCollectorSchema } from './utils';
+} from "@spotify/backstage-plugin-soundcheck-common";
+import { BranchCountFactCollectorSchema } from "./utils";
 
+/**
+ * Extractor store specifically for handling branch data.
+ * It implements the ExtractorsStore interface from the Soundcheck plugin
+ */
 export class BranchCountExtractorsStore implements ExtractorsStore {
-  static create(logger: Logger, config: Config): BranchCountExtractorsStore {
+  /**
+   * Static factory method for creating instances of BranchesDetailsExtractorsStore
+   * @param {Logger} logger - Logger instance
+   * @param {Config} config - Configuration instance
+   * @return {BranchesDetailsExtractorsStore} - New instance of BranchesDetailsExtractorsStore
+   */
+  static create(logger: Logger, config: Config) {
     return new BranchCountExtractorsStore(logger, config);
   }
 
+  // Private fields
   #extractorConfigs: Record<string, ExtractorConfig>;
   readonly #logger: Logger;
 
+  /**
+   * The constructor is private, use the static create() method to create instances
+   * @param {Logger} logger - Logger instance
+   * @param {Config} config - Configuration instance
+   */
   private constructor(logger: Logger, config: Config) {
     this.#logger = logger;
     this.#extractorConfigs = this.#parseExtractorSchemaTypesFromConfig(config);
@@ -29,29 +45,47 @@ export class BranchCountExtractorsStore implements ExtractorsStore {
     });
   }
 
-  #parseExtractorSchemaTypesFromConfig(
-    config: Config,
-  ): Record<string, ExtractorConfig> {
-    const collectors = config.getOptional('soundcheck.collectors.branch');
+  /**
+   * Parses extractor schema types from the given configuration
+   * @param {Config} config - The configuration to parse
+   * @return {Record<string, ExtractorConfig>} - The parsed extractor configurations
+   */
+  #parseExtractorSchemaTypesFromConfig(config: Config) {
+    // Retrieve the 'soundcheck.collectors.branch' configuration from the app-config.yaml file if it exists
+    const collectors = config.getOptional("soundcheck.collectors.branch");
 
     // branch collection not configured, so nothing to do.
-    if (!collectors) return {};
+    if (!collectors) {
+      this.#logger.error(`No branch collectors configured.`);
+      return;
+    }
 
     // Zod verification.
     const schema = BranchCountFactCollectorSchema.safeParse(collectors);
     if (!schema.success) {
-      this.#logger.error(`Failed to parse BranchCountFactCollector from schema.`);
+      this.#logger.error(
+        `Failed to parse BranchCountFactCollector from schema.`
+      );
       throw new Error(schema.error.message);
     }
 
     return buildExtractorConfigMap(schema.data);
   }
 
-  getExtractorConfig(factName: string): ExtractorConfig {
+  /**
+   * Gets the extractor configuration for the given fact name
+   * @param {string} factName - The name of the fact to get the extractor configuration for
+   * @return {ExtractorConfig} - The extractor configuration
+   */
+  getExtractorConfig(factName: string) {
     return this.#extractorConfigs[factName];
   }
 
-  getExtractorConfigs(): ExtractorConfig[] {
+  /**
+   * Gets all extractor configurations
+   * @return {ExtractorConfig[]} - The extractor configurations
+   */
+  getExtractorConfigs() {
     return Object.values(this.#extractorConfigs);
   }
 }
