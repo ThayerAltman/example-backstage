@@ -31,10 +31,10 @@ export class BranchCountFactCollector implements FactCollector {
   readonly #credentialsProvider: GithubCredentialsProvider;
 
   /**
-   * Factory method for creating instances of ADOFactCollector
+   * Factory method for creating instances of BranchCountFactCollector
    * @param {Config} config - Configuration object
    * @param {Logger} logger - Logger object
-   * @return {ADOFactCollector} An instance of ADOFactCollector
+   * @return {BranchCountFactCollector} An instance of BranchCountFactCollector
    */
   public static create(
     config: Config,
