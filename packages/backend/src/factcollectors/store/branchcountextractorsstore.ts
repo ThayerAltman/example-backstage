@@ -56,7 +56,7 @@ export class BranchCountExtractorsStore implements ExtractorsStore {
 
     // branch collection not configured, so nothing to do.
     if (!collectors) {
-      this.#logger.error(`No branch collectors configured.`);
+      this.#logger.error(`No branch collectors configured, make sure you have a 'soundcheck.collectors.branch' section in your app-config.yaml file.`);
       return;
     }
 
