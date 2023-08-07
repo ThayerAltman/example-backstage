@@ -3,8 +3,8 @@ import {
   CacheSchema,
   FilterSchema,
   FrequencySchema,
-} from '@spotify/backstage-plugin-soundcheck-common';
-import { z } from 'zod';
+} from "@spotify/backstage-plugin-soundcheck-common";
+import { z } from "zod";
 
 /**
  * Builds a schema for a fact collector.
@@ -26,21 +26,21 @@ export function buildFactCollectorSchema(ExtractorsChoice: z.ZodUnion<any>) {
   return z.array(SingleFactCollectorSchema).or(SingleFactCollectorSchema);
 }
 
-// Schema for the BranchesDetailsFactExtractor. It extends the BaseFactExtractorSchema and adds a type field.
-const BranchesDetailsFactExtractorSchema = BaseFactExtractorSchema.and(
+// Schema for the BranchCountFactExtractor. It extends the BaseFactExtractorSchema and adds a type field.
+const BranchCountFactExtractorSchema = BaseFactExtractorSchema.and(
   z.object({
     // The type should be a string and matches the regular expression `branchDescriptor`
     type: z.string().regex(new RegExp(`branchDescriptor`)),
   })
 );
 
-// Define the extractor choices. Currently, only BranchesDetailsFactExtractorSchema is available.
-const ExtractorsChoice = BranchesDetailsFactExtractorSchema.or(
-  BranchesDetailsFactExtractorSchema
+// Define the extractor choices. Currently, only BranchCountFactExtractorSchema is available.
+const ExtractorsChoice = BranchCountFactExtractorSchema.or(
+  BranchCountFactExtractorSchema
 );
 
 /**
- * Defines the BranchesDetailsFactCollectorSchema by building a fact collector schema with the given extractor choices.
+ * Defines the BranchCountFactCollectorSchema by building a fact collector schema with the given extractor choices.
  */
-export const BranchesDetailsFactCollectorSchema =
+export const BranchCountFactCollectorSchema =
   buildFactCollectorSchema(ExtractorsChoice);

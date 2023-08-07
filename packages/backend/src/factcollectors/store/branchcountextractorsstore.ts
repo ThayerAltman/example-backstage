@@ -1,11 +1,11 @@
-import { ExtractorsStore } from '@spotify/backstage-plugin-soundcheck-node';
-import { Logger } from 'winston';
-import { Config } from '@backstage/config';
+import { ExtractorsStore } from "@spotify/backstage-plugin-soundcheck-node";
+import { Logger } from "winston";
+import { Config } from "@backstage/config";
 import {
   buildExtractorConfigMap,
   ExtractorConfig,
-} from '@spotify/backstage-plugin-soundcheck-common';
-import { BranchCountFactCollectorSchema } from './utils';
+} from "@spotify/backstage-plugin-soundcheck-common";
+import { BranchCountFactCollectorSchema } from "./utils";
 
 /**
  * Extractor store specifically for handling branch data.
@@ -13,10 +13,10 @@ import { BranchCountFactCollectorSchema } from './utils';
  */
 export class BranchCountExtractorsStore implements ExtractorsStore {
   /**
-   * Static factory method for creating instances of BranchesDetailsExtractorsStore
+   * Static factory method for creating instances of BranchCountExtractorsStore
    * @param {Logger} logger - Logger instance
    * @param {Config} config - Configuration instance
-   * @return {BranchesDetailsExtractorsStore} - New instance of BranchesDetailsExtractorsStore
+   * @return {BranchCountExtractorsStore} - New instance of BranchCountExtractorsStore
    */
   static create(logger: Logger, config: Config) {
     return new BranchCountExtractorsStore(logger, config);
@@ -52,11 +52,13 @@ export class BranchCountExtractorsStore implements ExtractorsStore {
    */
   #parseExtractorSchemaTypesFromConfig(config: Config) {
     // Retrieve the 'soundcheck.collectors.branch' configuration from the app-config.yaml file if it exists
-    const collectors = config.getOptional('soundcheck.collectors.branch');
+    const collectors = config.getOptional("soundcheck.collectors.branch");
 
     // branch collection not configured, so nothing to do.
     if (!collectors) {
-      this.#logger.error(`No branch collectors configured, make sure you have a 'soundcheck.collectors.branch' section in your app-config.yaml file.`);
+      this.#logger.error(
+        `No branch collectors configured, make sure you have a 'soundcheck.collectors.branch' section in your app-config.yaml file.`
+      );
       return;
     }
 

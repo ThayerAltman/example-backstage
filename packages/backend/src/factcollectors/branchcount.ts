@@ -1,5 +1,5 @@
-import { FactCollector } from '@spotify/backstage-plugin-soundcheck-node';
-import { Entity, stringifyEntityRef } from '@backstage/catalog-model';
+import { FactCollector } from "@spotify/backstage-plugin-soundcheck-node";
+import { Entity, stringifyEntityRef } from "@backstage/catalog-model";
 import {
   CollectionConfig,
   ExtractorConfig,
@@ -9,21 +9,21 @@ import {
   stringifyFactRef,
   getEntityScmUrl,
   isScmEntity,
-} from '@spotify/backstage-plugin-soundcheck-common';
-import { Logger } from 'winston';
-import { Config, JsonObject } from '@backstage/config';
-import { DateTime } from 'luxon';
-import { BranchCountExtractorsStore } from './store/BranchCountExtractorsStore';
-import parseGitUrl from 'git-url-parse';
+} from "@spotify/backstage-plugin-soundcheck-common";
+import { Logger } from "winston";
+import { Config, JsonObject } from "@backstage/config";
+import { DateTime } from "luxon";
+import { BranchCountExtractorsStore } from "./store/branchcountextractorsstore";
+import parseGitUrl from "git-url-parse";
 import {
   DefaultGithubCredentialsProvider,
   GithubCredentialsProvider,
   ScmIntegrations,
-} from '@backstage/integration';
-import { graphql, GraphQlQueryResponseData } from '@octokit/graphql';
+} from "@backstage/integration";
+import { graphql, GraphQlQueryResponseData } from "@octokit/graphql";
 
 export class BranchCountFactCollector implements FactCollector {
-  public static ID = 'branch';
+  public static ID = "branch";
 
   // Private fields
   readonly #logger: Logger;
@@ -106,8 +106,8 @@ export class BranchCountFactCollector implements FactCollector {
   ) {
     try {
       const factRef: FactRef = stringifyFactRef({
-        name: 'branch_count',
-        scope: 'default',
+        name: "branch_count",
+        scope: "default",
         source: this.id,
       });
       const results = await Promise.all(
@@ -131,14 +131,14 @@ export class BranchCountFactCollector implements FactCollector {
     const { token } = await this.#credentialsProvider.getCredentials({
       url: entityScmUrl,
     });
-    const {
-      repository: { refs: totalCount },
-    } = (
-      await graphql<GraphQlQueryResponseData>(
+    try {
+      const {
+        repository: { refs: totalCount },
+      } = await graphql<GraphQlQueryResponseData>(
         `
           query numBranches($owner: String!, $repo: String!) {
             repository(owner: $owner, name: $repo) {
-              refs(first: 0, refPrefix: 'refs/heads/') {
+              refs(first: 0, refPrefix: "refs/heads/") {
                 totalCount
               }
             }
@@ -151,19 +151,18 @@ export class BranchCountFactCollector implements FactCollector {
             authorization: `Bearer ${token}`,
           },
         }
-      )
-    ).catch((e) => {
+      );
+      this.#logger.info(
+        `BranchCountFactCollector: ${gitUrl.owner} ${gitUrl.name} - Total Count: ${totalCount} `
+      );
+
+      return this.buildFact(entityRef, factRef, totalCount);
+    } catch (e) {
       this.#logger.error(
         `BranchCountFactCollector: ${gitUrl.owner} ${gitUrl.name} - Failed to collect branch data with error: ${e}`
       );
       return null;
-    });
-
-    this.#logger.info(
-      `BranchCountFactCollector: ${gitUrl.owner} ${gitUrl.name} - Total Count: ${totalCount} `
-    );
-
-    return this.buildFact(entityRef, factRef, totalCount);
+    }
   }
 
   /**
