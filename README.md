@@ -1,6 +1,6 @@
 # [Backstage and Soundcheck Tutorial](https://backstage.io)
 
-This is meant to be a guide for getting Soundcheck up and running.  Each section of the README walks through a commit done to install and use Soundcheck.  The application can be run from any commit in this repo.
+This is meant to be a guide for getting Soundcheck up and running within Backstage.  This guide includes instructions to install and setup Backstage locally.  Each section of the README walks through a commit done to install and use Soundcheck.  The application can be run from any commit in this repo.
 
 Skip to any section below for a commit highlighting that specific intent.  Each section has a link the commit that accomplished the intent.
 
